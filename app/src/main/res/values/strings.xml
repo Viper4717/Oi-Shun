@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Oi Shun</string>
+    <string name="recordbutton">recordButton</string>
 </resources>
