@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Setting the default activity to MainActivity (App will start at this page)
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
 
         //Starting the Voice Recorder activity (Button needs to be added)
         startActivity(new Intent(getApplicationContext(), VoiceReorder.class));

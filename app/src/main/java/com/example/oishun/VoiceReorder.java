@@ -45,41 +45,41 @@ public class VoiceReorder extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice_reorder);
-        if(checkPermissionFromDevice()) {
-            //Initialization
-            recordButton = (ImageButton) findViewById(R.id.recordButton);
-            pauseButton = (ImageButton) findViewById(R.id.pauseButton);
-            backButton = (ImageButton) findViewById(R.id.backButton);
-            recordTimer = (TextView) findViewById(R.id.recordTimer);
-            storageRemaining = (TextView) findViewById(R.id.storageRemaining);
-            mediaRecorder =  new MediaRecorder();
-            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory()
-                    .getAbsolutePath()+"/"+ UUID.randomUUID().toString()+"_audio_record.3gp");
 
-            //Recordbutton action
-            recordButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    RecordMethod(recording);
-                    recording = (!recording);
-                }
-            });
-
-            //Pausebutton action
-            pauseButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    PauseMethod(paused);
-                    paused = (!paused);
-                }
-            });
-        }
-        else{
+        //Seeking permission from device to write and record
+        if(!checkPermissionFromDevice())
             requestPermissionFromDevice();
-        }
+
+        //Initialization
+        recordButton = (ImageButton) findViewById(R.id.recordButton);
+        pauseButton = (ImageButton) findViewById(R.id.pauseButton);
+        backButton = (ImageButton) findViewById(R.id.backButton);
+        recordTimer = (TextView) findViewById(R.id.recordTimer);
+        storageRemaining = (TextView) findViewById(R.id.storageRemaining);
+        mediaRecorder =  new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory()
+                .getAbsolutePath()+"/"+ UUID.randomUUID().toString()+"_audio_record.3gp");
+
+        //Recordbutton action
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RecordMethod(recording);
+                recording = (!recording);
+            }
+        });
+
+        //Pausebutton action
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PauseMethod(paused);
+                paused = (!paused);
+            }
+        });
     }
 
     //Method to check write and record permission from device
@@ -100,8 +100,10 @@ public class VoiceReorder extends AppCompatActivity {
         }, REQUEST_PERMISSION_CODE);
     }
 
+    //Method to show if permission is granted or not
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         switch(requestCode){
             case REQUEST_PERMISSION_CODE:
             {
@@ -116,9 +118,6 @@ public class VoiceReorder extends AppCompatActivity {
 
     //Method for recording
     private void RecordMethod(boolean recording) {
-
-
-
         if(recording){
             //Changing the recordbutton image to stop
             recordButton.setBackgroundResource(R.drawable.stop_button_image);
@@ -139,6 +138,7 @@ public class VoiceReorder extends AppCompatActivity {
         }
 
         else{
+            //changing the recordbutton image to record
             recordButton.setBackgroundResource(R.drawable.record_button_image);
             Toast.makeText(this, "Recording Stopped", Toast.LENGTH_SHORT).show();
             mediaRecorder.stop();
