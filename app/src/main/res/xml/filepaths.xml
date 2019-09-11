@@ -4,4 +4,8 @@
         name="VoiceRecorder"
         path="VoiceRecorder/">
     </external-path>
+    <external-path
+        name="HomePage"
+        path="HomePage/">
+    </external-path>
 </paths>
