@@ -3,6 +3,8 @@
     <string name="recordbutton">recordButton</string>
     <string name="pausebutton">pauseButton</string>
     <string name="backbutton">backButton</string>
+    <string name="tab_text_1">Subscriptions</string>
+    <string name="tab_text_2">Explore</string>
     <string-array name="contentNames">
         <item>Content Name</item>
         <item>Content Name</item>
