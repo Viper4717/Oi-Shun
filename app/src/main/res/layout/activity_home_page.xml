@@ -4,12 +4,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#303030">
+    android:background="@color/backgroundColor">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#fbbe03">
+        android:background="@color/oiShunYellow">
 
 
         <TextView
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
-        android:background="#303030"
+        android:background="@color/backgroundColor"
         >
 
 
@@ -41,8 +41,8 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            app:tabTextColor="#fbbe03"/>
+            android:background="@color/backgroundColor"
+            app:tabTextColor="@color/oiShunYellow"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
