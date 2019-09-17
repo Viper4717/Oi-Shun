@@ -15,13 +15,13 @@
         <TextView
             android:id="@+id/oiShunText"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Oi Shun"
-            android:textColor="#000000"
-            android:textAlignment="center"
-            android:textSize="40sp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="120dp"
             android:fontFamily="@font/audiowide_regular"
+            android:text="Oi Shun"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="40sp"
 
             />
 
@@ -51,11 +51,6 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="46dp"
-        android:layout_height="311dp"
-        android:layout_gravity="bottom|end"
 
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+
 </LinearLayout>
