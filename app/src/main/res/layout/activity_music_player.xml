@@ -23,7 +23,8 @@
             android:id="@+id/backButton"
             android:layout_width="18dp"
             android:layout_height="32dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginLeft="25dp"
             android:background="@drawable/back_button_image"
             android:clickable="true"
@@ -34,7 +35,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/round_button"
             tools:srcCompat="@drawable/round_button"
-            android:focusable="true" />
+            android:focusable="true"
+            android:layout_marginStart="25dp" />
     </RelativeLayout>
 
     <ImageView
@@ -43,13 +45,52 @@
         android:scaleX="2"
         android:scaleY="2"
         android:src="@drawable/image"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="110dp"
         android:contentDescription="@string/audioart" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="-10dp">
+
+        <ImageButton
+            android:id="@+id/rewindButton"
+            android:layout_width="100dp"
+            android:layout_height="170dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:background="?android:selectableItemBackground"
+            android:contentDescription="rewind"
+            android:src="@drawable/rewind" />
+
+        <ImageButton
+            android:id="@+id/playButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+
+            android:layout_marginTop="100dp"
+            android:background="?android:selectableItemBackground"
+            android:src="@drawable/play"
+            android:contentDescription="play" />
+
+        <ImageButton
+            android:id="@+id/volumeButton"
+            android:layout_width="100dp"
+            android:layout_height="170dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="?android:selectableItemBackground"
+            android:contentDescription="volume"
+            android:src="@drawable/sound2" />
+    </RelativeLayout>
 
     <SeekBar
         android:layout_width="420dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="230dp"
+        android:layout_height="14dp"
+        android:layout_marginTop="-20dp"
         android:progressTint="@color/oiShunYellow"
         android:thumbTint="@color/oiShunYellow" />
 
