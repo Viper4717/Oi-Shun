@@ -6,120 +6,142 @@
     @author Azmin Azran
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
-    tools:context="com.example.oishun.MusicPlayer"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:gravity="center_horizontal">
+    tools:context="com.example.oishun.MusicPlayer">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="18dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="25dp"
-            android:background="@drawable/back_button_image"
-            android:clickable="true"
-            android:contentDescription="@string/backbutton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.073"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/round_button"
-            tools:srcCompat="@drawable/round_button"
-            android:focusable="true"
-            android:layout_marginStart="25dp" />
-    </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="31dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/back_button_image"
+        android:clickable="true"
+        android:contentDescription="@string/backbutton"
+        android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.039"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/round_button"
+        tools:srcCompat="@drawable/round_button" />
+
+    <ImageButton
+        android:id="@+id/rewindButton"
+        android:layout_width="110dp"
+        android:layout_height="122dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:background="?android:selectableItemBackground"
+        android:contentDescription="@string/rewind"
+        android:src="@drawable/rewind"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/playButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0" />
+
+    <ImageButton
+        android:id="@+id/playButton"
+        android:layout_width="106dp"
+        android:layout_height="123dp"
+
+        android:background="?android:selectableItemBackground"
+        android:contentDescription="@string/play"
+        android:src="@drawable/play"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageButton
+        android:id="@+id/volumeButton"
+        android:layout_width="118dp"
+        android:layout_height="123dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="?android:selectableItemBackground"
+        android:contentDescription="@string/volume"
+        android:src="@drawable/sound2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/playButton"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleX="2"
-        android:scaleY="2"
-        android:src="@drawable/image"
-        android:layout_marginTop="110dp"
-        android:layout_marginBottom="10dp"
-        android:contentDescription="@string/audioart" />
-
-    <RelativeLayout
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="175dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginBottom="-10dp">
-
-        <ImageButton
-            android:id="@+id/rewindButton"
-            android:layout_width="100dp"
-            android:layout_height="170dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:background="?android:selectableItemBackground"
-            android:contentDescription="rewind"
-            android:src="@drawable/rewind" />
-
-        <ImageButton
-            android:id="@+id/playButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-
-            android:layout_marginTop="100dp"
-            android:background="?android:selectableItemBackground"
-            android:src="@drawable/play"
-            android:contentDescription="play" />
-
-        <ImageButton
-            android:id="@+id/volumeButton"
-            android:layout_width="100dp"
-            android:layout_height="170dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:background="?android:selectableItemBackground"
-            android:contentDescription="volume"
-            android:src="@drawable/sound2" />
-    </RelativeLayout>
+        android:layout_height="0dp"
+        android:contentDescription="@string/audioart"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.265" />
 
     <SeekBar
-        android:layout_width="420dp"
-        android:layout_height="14dp"
-        android:layout_marginTop="-20dp"
-        android:layout_marginBottom="10dp"
-        android:progressTint="@color/oiShunYellow"
-        android:thumbTint="@color/oiShunYellow" />
-
-    <RelativeLayout
+        android:id="@+id/seekBar"
         android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:progressTint="@color/oiShunYellow"
+        android:thumbTint="@color/oiShunYellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/elapsedTimeLabel"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/oiShunYellow"
-            android:textSize="20sp"
-            android:text="@string/_0_00"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+        android:layout_marginEnd="340dp"
+        android:layout_marginRight="340dp"
+        android:text="@string/_0_00"
+        android:textColor="@color/oiShunYellow"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/remainingTimeLabel"
+        app:layout_constraintHorizontal_bias="0.882"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rewindButton"
+        app:layout_constraintVertical_bias="0.412" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/oiShunYellow"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:textSize="20sp"
-            android:text="@string/_3_00"
-            tools:ignore="RelativeOverlap" />
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/remainingTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="@string/_3_00"
+        android:textColor="@color/oiShunYellow"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/volumeButton"
+        app:layout_constraintVertical_bias="0.412"
+        tools:ignore="RelativeOverlap" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

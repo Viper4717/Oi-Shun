@@ -8,6 +8,9 @@
     <string name="_0_00">0:00</string>
     <string name="_3_00">-3:00</string>
     <string name="audioart">AudioArt</string>
+    <string name="play">play</string>
+    <string name="volume">volume</string>
+    <string name="rewind">rewind</string>
     <string-array name="contentNames">
         <item>Content Name</item>
         <item>Content Name</item>
