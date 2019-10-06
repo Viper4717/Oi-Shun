@@ -38,6 +38,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -54,7 +55,6 @@ public class VoiceReorder extends AppCompatActivity {
     final int REQUEST_PERMISSION_CODE = 1000;
     StorageReference storageReference;
     ProgressDialog progressDialog;
-    Date createdTime;
     String outputDir;
     String oldFileName;
     String newFIleName;
@@ -76,12 +76,12 @@ public class VoiceReorder extends AppCompatActivity {
         storageRemaining = (TextView) findViewById(R.id.storageRemaining);
         storageReference = FirebaseStorage.getInstance().getReference();
         progressDialog = new ProgressDialog(this);
-        createdTime = new Date();
+        oldFileName = null;
+        newFIleName = null;
         outputDir = Environment.getExternalStorageDirectory()
                 .getAbsolutePath()+File.separator+"OiShun";
-        oldFileName = Environment.getExternalStorageDirectory()
-                .getAbsolutePath()+"/"+createdTime+"_record.3gp";
-        newFIleName = null;
+        File file = new File(outputDir);
+        if(!file.exists()) file.mkdir();
 
         //Recordbutton action
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -143,19 +143,16 @@ public class VoiceReorder extends AppCompatActivity {
             recordButton.setBackgroundResource(R.drawable.stop_button_image);
             Toast.makeText(this, "Recording Started", Toast.LENGTH_SHORT).show();
 
-            //Folder directory to store the file
-            /*File folder = new File(Environment.getExternalStorageDirectory()
-                    +"/OiShun/"+ UUID.randomUUID().toString()+"audio_record.3gp");
-            if(!folder.exists()){
-                folder.mkdir();
-            }*/
+            //preparing the mediaRecorder
             mediaRecorder =  new MediaRecorder();
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            //mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory()
-                    //.getAbsolutePath()+"/"+ UUID.randomUUID().toString()+"_audio_record.3gp");
-            mediaRecorder.setOutputFile(oldFileName);
+            Date date = new Date();
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+                    .format(date.getTime());
+            oldFileName = timeStamp+".3gp";
+            mediaRecorder.setOutputFile(outputDir+File.separator+oldFileName);
             try{
                 mediaRecorder.prepare();
                 mediaRecorder.start();
@@ -181,7 +178,7 @@ public class VoiceReorder extends AppCompatActivity {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-        // set prompts.xml to alertdialog builder
+        //set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
 
         final EditText userInput = (EditText) promptsView.findViewById(R.id.edit_file_name);
@@ -189,11 +186,10 @@ public class VoiceReorder extends AppCompatActivity {
         Button upload = (Button) promptsView.findViewById(R.id.upload);
         Button save = (Button) promptsView.findViewById(R.id.save);
 
-
-        // set dialog message
+        //set dialog message
         alertDialogBuilder.setCancelable(false);
 
-        // create alert dialog
+        //create alert dialog
         final AlertDialog alertDialog = alertDialogBuilder.create();
 
         upload.setOnClickListener(new View.OnClickListener() {
@@ -201,11 +197,11 @@ public class VoiceReorder extends AppCompatActivity {
             public void onClick(View v) {
                 newFIleName = userInput.getText().toString();
                 if (newFIleName != null && newFIleName.trim().length() > 0) {
-                    File newFile = new File(Environment.getExternalStorageDirectory()
-                            .getAbsolutePath(), newFIleName);
-                    File oldFile = new File(oldFileName);
+                    File newFile = new File(outputDir, newFIleName);
+                    File oldFile = new File(outputDir, oldFileName);
                     oldFile.renameTo(newFile);
                     uploadAudio();
+                    oldFileName = null;
                     alertDialog.dismiss();
                 }
             }
@@ -215,15 +211,15 @@ public class VoiceReorder extends AppCompatActivity {
             public void onClick(View v) {
                 newFIleName = userInput.getText().toString();
                 if (newFIleName != null && newFIleName.trim().length() > 0) {
-                    File newFile = new File(Environment.getExternalStorageDirectory()
-                            .getAbsolutePath(), newFIleName);
-                    File oldFile = new File(oldFileName);
+                    File newFile = new File(outputDir, newFIleName);
+                    File oldFile = new File(outputDir, oldFileName);
                     oldFile.renameTo(newFile);
+                    oldFileName = null;
                     alertDialog.dismiss();
                 }
             }
         });
-        // show it
+        //showing it
         alertDialog.show();
     }
 
@@ -233,8 +229,7 @@ public class VoiceReorder extends AppCompatActivity {
         progressDialog.show();
         StorageReference filePath = storageReference.child("Recordings").child(newFIleName);
 
-        Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory()
-                .getAbsolutePath(), newFIleName));
+        Uri uri = Uri.fromFile(new File(outputDir, newFIleName));
 
         filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
