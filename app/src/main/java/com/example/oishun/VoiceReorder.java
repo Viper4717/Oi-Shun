@@ -12,20 +12,33 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.util.Date;
 import java.util.UUID;
 
 public class VoiceReorder extends AppCompatActivity {
@@ -38,8 +51,13 @@ public class VoiceReorder extends AppCompatActivity {
     MediaRecorder mediaRecorder;
     boolean recording = true;
     boolean paused = true;
-    String savePath = "";
     final int REQUEST_PERMISSION_CODE = 1000;
+    StorageReference storageReference;
+    ProgressDialog progressDialog;
+    Date createdTime;
+    String outputDir;
+    String oldFileName;
+    String newFIleName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +74,14 @@ public class VoiceReorder extends AppCompatActivity {
         backButton = (ImageButton) findViewById(R.id.backButton);
         recordTimer = (TextView) findViewById(R.id.recordTimer);
         storageRemaining = (TextView) findViewById(R.id.storageRemaining);
-        mediaRecorder =  new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory()
-                .getAbsolutePath()+"/"+ UUID.randomUUID().toString()+"_audio_record.3gp");
+        storageReference = FirebaseStorage.getInstance().getReference();
+        progressDialog = new ProgressDialog(this);
+        createdTime = new Date();
+        outputDir = Environment.getExternalStorageDirectory()
+                .getAbsolutePath()+File.separator+"OiShun";
+        oldFileName = Environment.getExternalStorageDirectory()
+                .getAbsolutePath()+"/"+createdTime+"_record.3gp";
+        newFIleName = null;
 
         //Recordbutton action
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +149,13 @@ public class VoiceReorder extends AppCompatActivity {
             if(!folder.exists()){
                 folder.mkdir();
             }*/
+            mediaRecorder =  new MediaRecorder();
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            //mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory()
+                    //.getAbsolutePath()+"/"+ UUID.randomUUID().toString()+"_audio_record.3gp");
+            mediaRecorder.setOutputFile(oldFileName);
             try{
                 mediaRecorder.prepare();
                 mediaRecorder.start();
@@ -142,7 +169,79 @@ public class VoiceReorder extends AppCompatActivity {
             recordButton.setBackgroundResource(R.drawable.record_button_image);
             Toast.makeText(this, "Recording Stopped", Toast.LENGTH_SHORT).show();
             mediaRecorder.stop();
+            mediaRecorder.release();
+            mediaRecorder = null;
+            saveRecording();
         }
+    }
+
+    private void saveRecording() {
+        LayoutInflater li = LayoutInflater.from(this);
+        View promptsView = li.inflate(R.layout.set_file_name, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText userInput = (EditText) promptsView.findViewById(R.id.edit_file_name);
+        userInput.setText(oldFileName);
+        Button upload = (Button) promptsView.findViewById(R.id.upload);
+        Button save = (Button) promptsView.findViewById(R.id.save);
+
+
+        // set dialog message
+        alertDialogBuilder.setCancelable(false);
+
+        // create alert dialog
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newFIleName = userInput.getText().toString();
+                if (newFIleName != null && newFIleName.trim().length() > 0) {
+                    File newFile = new File(Environment.getExternalStorageDirectory()
+                            .getAbsolutePath(), newFIleName);
+                    File oldFile = new File(oldFileName);
+                    oldFile.renameTo(newFile);
+                    uploadAudio();
+                    alertDialog.dismiss();
+                }
+            }
+        });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newFIleName = userInput.getText().toString();
+                if (newFIleName != null && newFIleName.trim().length() > 0) {
+                    File newFile = new File(Environment.getExternalStorageDirectory()
+                            .getAbsolutePath(), newFIleName);
+                    File oldFile = new File(oldFileName);
+                    oldFile.renameTo(newFile);
+                    alertDialog.dismiss();
+                }
+            }
+        });
+        // show it
+        alertDialog.show();
+    }
+
+    //method to upload audio files to firebase
+    private void uploadAudio() {
+        progressDialog.setMessage("Uploading ...");
+        progressDialog.show();
+        StorageReference filePath = storageReference.child("Recordings").child(newFIleName);
+
+        Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory()
+                .getAbsolutePath(), newFIleName));
+
+        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                progressDialog.dismiss();
+            }
+        });
     }
 
     //Method for pausing
