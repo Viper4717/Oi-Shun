@@ -15,6 +15,6 @@ public class MainActivity extends AppCompatActivity {
         //setContentView(R.layout.activity_main);
 
         //Starting the Voice Recorder activity (Button needs to be added)
-        startActivity(new Intent(getApplicationContext(), HomePage.class));
+        startActivity(new Intent(getApplicationContext(), SignInPage.class));
     }
 }
