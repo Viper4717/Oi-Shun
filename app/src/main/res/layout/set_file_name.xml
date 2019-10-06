@@ -2,8 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/set_file_name"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#303030"
     android:orientation="vertical">
 
     <TextView
@@ -15,6 +17,7 @@
         android:layout_marginTop="30dp"
         android:text="Enter File Name:"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/colorAccent"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,9 +34,11 @@
         android:ems="10"
         android:hint="Name "
         android:inputType="textPersonName"
+        android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enter_file_name">
+
         <requestFocus />
 
     </EditText>
@@ -46,7 +51,10 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
+        android:background="@color/backgroundColor"
+        android:divider="@color/backgroundColor"
         android:orientation="horizontal"
+        android:paddingBottom="30dp"
         android:weightSum="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,17 +64,21 @@
             android:id="@+id/upload"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5sp"
             android:layout_weight="1"
+            android:background="@color/colorAccent"
             android:text="Upload"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5sp"
             android:layout_weight="1"
+            android:background="@color/colorAccent"
             android:text="Save "
-            android:textSize="14sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
