@@ -73,7 +73,7 @@ public class SignInPage extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     logInUser = ds.getValue(User.class);
 
-                    if(logInUser.getName().equals(name) && logInUser.getPasswrod().equals(password)) {
+                    if(logInUser.getName().equals(name) && logInUser.getPassword().equals(password)) {
                         Toast.makeText(SignInPage.this,"Successful",Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(SignInPage.this,HomePage.class);
                         flag = 1;

@@ -2,14 +2,14 @@ package com.example.oishun;
 
 public class User {
     private String name;
-    private String passwrod;
+    private String password;
 
     public User() {
     }
 
     public User(String name, String passwrod) {
         this.name = name;
-        this.passwrod = passwrod;
+        this.password = passwrod;
     }
 
     public String getName() {
@@ -20,11 +20,11 @@ public class User {
         this.name = name;
     }
 
-    public String getPasswrod() {
-        return passwrod;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswrod(String passwrod) {
-        this.passwrod = passwrod;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

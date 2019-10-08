@@ -21,6 +21,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StatFs;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -87,6 +89,8 @@ public class VoiceReorder extends AppCompatActivity {
                 .getAbsolutePath()+File.separator+"OiShun";
         File file = new File(outputDir);
         if(!file.exists()) file.mkdir();
+        double freeBytesExternal = new File(getExternalFilesDir(null).toString()).getFreeSpace();
+        storageRemaining.setText(formatSize(freeBytesExternal));
 
         //Recordbutton action
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +184,12 @@ public class VoiceReorder extends AppCompatActivity {
             mediaRecorder.stop();
             mediaRecorder.release();
             mediaRecorder = null;
+
+            //getting the available free space again
+            long freeBytesExternal = new File(getExternalFilesDir(null).toString()).getFreeSpace();
+            storageRemaining.setText(formatSize(freeBytesExternal));
+
+            //resetting the timer and saving the recording
             resetChronometer();
             saveRecording();
         }
@@ -292,5 +302,24 @@ public class VoiceReorder extends AppCompatActivity {
         recordTimer.stop();
         recordTimer.setBase(SystemClock.elapsedRealtime());
         pauseOffset = 0;
+    }
+
+    //method to get available size
+    public static String formatSize(double size) {
+        String suffix = null;
+        if (size >= 1024) {
+            suffix = "KB";
+            size /= 1024;
+            if (size >= 1024) {
+                suffix = "MB";
+                size /= 1024;
+                if (size >= 1024) {
+                    suffix = "GB";
+                    size /= 1024;
+                }
+            }
+        }
+        String sizeString = new DecimalFormat("#.##").format(size);
+        return sizeString+" "+suffix+" remaining";
     }
 }
