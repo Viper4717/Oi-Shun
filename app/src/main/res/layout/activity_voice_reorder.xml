@@ -24,7 +24,6 @@
         android:contentDescription="@string/recordbutton"
         android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/round_button"
@@ -42,21 +41,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recordButton" />
 
-    <ImageButton
-        android:id="@+id/pauseButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="45dp"
-        android:background="@drawable/pause_button_image"
-        android:clickable="true"
-        android:contentDescription="@string/pausebutton"
-        android:focusable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recordTimer"
-        app:srcCompat="@drawable/round_button"
-        tools:srcCompat="@drawable/round_button" />
-
     <TextView
         android:id="@+id/storageRemaining"
         android:layout_width="wrap_content"
@@ -67,7 +51,24 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pauseButton" />
+        app:layout_constraintTop_toBottomOf="@+id/recordTimer" />
+
+    <ImageButton
+        android:id="@+id/pauseButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="45dp"
+        android:background="@drawable/pause_button_image"
+        android:clickable="true"
+        android:contentDescription="@string/pausebutton"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storageRemaining"
+        app:srcCompat="@drawable/round_button"
+        tools:srcCompat="@drawable/round_button"
+        tools:visibility="gone" />
 
     <ImageButton
         android:id="@+id/backButton"
@@ -84,5 +85,19 @@
         app:srcCompat="@drawable/round_button"
         tools:srcCompat="@drawable/round_button"
         android:focusable="true" />
+
+    <TextView
+        android:id="@+id/pausedStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Paused "
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pauseButton"
+        tools:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

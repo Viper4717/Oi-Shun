@@ -49,6 +49,7 @@ public class VoiceReorder extends AppCompatActivity {
     ImageButton backButton;
     TextView recordTimer;
     TextView storageRemaining;
+    TextView pausedStatus;
     MediaRecorder mediaRecorder;
     boolean recording = true;
     boolean paused = true;
@@ -74,6 +75,7 @@ public class VoiceReorder extends AppCompatActivity {
         backButton = (ImageButton) findViewById(R.id.backButton);
         recordTimer = (TextView) findViewById(R.id.recordTimer);
         storageRemaining = (TextView) findViewById(R.id.storageRemaining);
+        pausedStatus = (TextView) findViewById(R.id.pausedStatus);
         storageReference = FirebaseStorage.getInstance().getReference();
         progressDialog = new ProgressDialog(this);
         oldFileName = null;
@@ -141,6 +143,7 @@ public class VoiceReorder extends AppCompatActivity {
         if(recording){
             //Changing the recordbutton image to stop
             recordButton.setBackgroundResource(R.drawable.stop_button_image);
+            pauseButton.setVisibility(View.VISIBLE);
             Toast.makeText(this, "Recording Started", Toast.LENGTH_SHORT).show();
 
             //preparing the mediaRecorder
@@ -151,8 +154,10 @@ public class VoiceReorder extends AppCompatActivity {
             Date date = new Date();
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
                     .format(date.getTime());
-            oldFileName = timeStamp+".3gp";
-            mediaRecorder.setOutputFile(outputDir+File.separator+oldFileName);
+            oldFileName = timeStamp;
+            mediaRecorder.setOutputFile(outputDir+File.separator+oldFileName+".3gp");
+
+            //starting the mediaRecorder
             try{
                 mediaRecorder.prepare();
                 mediaRecorder.start();
@@ -164,7 +169,10 @@ public class VoiceReorder extends AppCompatActivity {
         else{
             //changing the recordbutton image to record
             recordButton.setBackgroundResource(R.drawable.record_button_image);
+            pauseButton.setVisibility(View.GONE);
             Toast.makeText(this, "Recording Stopped", Toast.LENGTH_SHORT).show();
+
+            //stopping the mediaRecorder
             mediaRecorder.stop();
             mediaRecorder.release();
             mediaRecorder = null;
@@ -172,6 +180,7 @@ public class VoiceReorder extends AppCompatActivity {
         }
     }
 
+    //method to save the recording with custom name
     private void saveRecording() {
         LayoutInflater li = LayoutInflater.from(this);
         View promptsView = li.inflate(R.layout.set_file_name, null);
@@ -183,6 +192,7 @@ public class VoiceReorder extends AppCompatActivity {
 
         final EditText userInput = (EditText) promptsView.findViewById(R.id.edit_file_name);
         userInput.setText(oldFileName);
+        userInput.setSelection(userInput.length());
         Button upload = (Button) promptsView.findViewById(R.id.upload);
         Button save = (Button) promptsView.findViewById(R.id.save);
 
@@ -197,8 +207,8 @@ public class VoiceReorder extends AppCompatActivity {
             public void onClick(View v) {
                 newFIleName = userInput.getText().toString();
                 if (newFIleName != null && newFIleName.trim().length() > 0) {
-                    File newFile = new File(outputDir, newFIleName);
-                    File oldFile = new File(outputDir, oldFileName);
+                    File newFile = new File(outputDir, newFIleName+".3gp");
+                    File oldFile = new File(outputDir, oldFileName+".3gp");
                     oldFile.renameTo(newFile);
                     uploadAudio();
                     oldFileName = null;
@@ -211,8 +221,8 @@ public class VoiceReorder extends AppCompatActivity {
             public void onClick(View v) {
                 newFIleName = userInput.getText().toString();
                 if (newFIleName != null && newFIleName.trim().length() > 0) {
-                    File newFile = new File(outputDir, newFIleName);
-                    File oldFile = new File(outputDir, oldFileName);
+                    File newFile = new File(outputDir, newFIleName+".3gp");
+                    File oldFile = new File(outputDir, oldFileName+".3gp");
                     oldFile.renameTo(newFile);
                     oldFileName = null;
                     alertDialog.dismiss();
@@ -223,7 +233,7 @@ public class VoiceReorder extends AppCompatActivity {
         alertDialog.show();
     }
 
-    //method to upload audio files to firebase
+    //method to upload audio files to Firebase
     private void uploadAudio() {
         progressDialog.setMessage("Uploading ...");
         progressDialog.show();
@@ -241,5 +251,22 @@ public class VoiceReorder extends AppCompatActivity {
 
     //Method for pausing
     private void PauseMethod(boolean paused) {
+        if(paused){
+            //Showing the paused status
+            Toast.makeText(this, "Paused", Toast.LENGTH_SHORT).show();
+            pausedStatus.setVisibility(View.VISIBLE);
+
+            //pausing the mediaRecorder
+            mediaRecorder.pause();
+        }
+
+        else{
+            //hiding the paused status;
+            Toast.makeText(this, "Resumed", Toast.LENGTH_SHORT).show();
+            pausedStatus.setVisibility(View.GONE);
+
+            //resuming the mediaRecorder
+            mediaRecorder.resume();
+        }
     }
 }
