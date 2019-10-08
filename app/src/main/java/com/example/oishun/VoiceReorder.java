@@ -21,10 +21,12 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -47,7 +49,7 @@ public class VoiceReorder extends AppCompatActivity {
     ImageButton recordButton;
     ImageButton pauseButton;
     ImageButton backButton;
-    TextView recordTimer;
+    Chronometer recordTimer;
     TextView storageRemaining;
     TextView pausedStatus;
     MediaRecorder mediaRecorder;
@@ -59,6 +61,7 @@ public class VoiceReorder extends AppCompatActivity {
     String outputDir;
     String oldFileName;
     String newFIleName;
+    long pauseOffset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +76,7 @@ public class VoiceReorder extends AppCompatActivity {
         recordButton = (ImageButton) findViewById(R.id.recordButton);
         pauseButton = (ImageButton) findViewById(R.id.pauseButton);
         backButton = (ImageButton) findViewById(R.id.backButton);
-        recordTimer = (TextView) findViewById(R.id.recordTimer);
+        recordTimer = (Chronometer) findViewById(R.id.recordTimer);
         storageRemaining = (TextView) findViewById(R.id.storageRemaining);
         pausedStatus = (TextView) findViewById(R.id.pausedStatus);
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -161,6 +164,7 @@ public class VoiceReorder extends AppCompatActivity {
             try{
                 mediaRecorder.prepare();
                 mediaRecorder.start();
+                startChronometer();
             } catch (IOException e){
                 e.printStackTrace();
             }
@@ -176,6 +180,7 @@ public class VoiceReorder extends AppCompatActivity {
             mediaRecorder.stop();
             mediaRecorder.release();
             mediaRecorder = null;
+            resetChronometer();
             saveRecording();
         }
     }
@@ -258,6 +263,7 @@ public class VoiceReorder extends AppCompatActivity {
 
             //pausing the mediaRecorder
             mediaRecorder.pause();
+            pauseChronometer();
         }
 
         else{
@@ -267,6 +273,24 @@ public class VoiceReorder extends AppCompatActivity {
 
             //resuming the mediaRecorder
             mediaRecorder.resume();
+            startChronometer();
         }
+    }
+
+    //Methods to control the recordTimer
+    public void startChronometer() {
+        recordTimer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+        recordTimer.start();
+    }
+
+    public void pauseChronometer() {
+        recordTimer.stop();
+        pauseOffset = SystemClock.elapsedRealtime() - recordTimer.getBase();
+    }
+
+    public void resetChronometer() {
+        recordTimer.stop();
+        recordTimer.setBase(SystemClock.elapsedRealtime());
+        pauseOffset = 0;
     }
 }
