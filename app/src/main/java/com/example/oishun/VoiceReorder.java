@@ -63,6 +63,7 @@ public class VoiceReorder extends AppCompatActivity {
     String outputDir;
     String oldFileName;
     String newFIleName;
+    String userName;
     long pauseOffset;
 
     @Override
@@ -91,6 +92,8 @@ public class VoiceReorder extends AppCompatActivity {
         if(!file.exists()) file.mkdir();
         double freeBytesExternal = new File(getExternalFilesDir(null).toString()).getFreeSpace();
         storageRemaining.setText(formatSize(freeBytesExternal));
+        Intent tempIntent = getIntent();
+        userName = tempIntent.getStringExtra("user_name");
 
         //Recordbutton action
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -184,6 +187,7 @@ public class VoiceReorder extends AppCompatActivity {
             mediaRecorder.stop();
             mediaRecorder.release();
             mediaRecorder = null;
+            saveRecording();
 
             //getting the available free space again
             long freeBytesExternal = new File(getExternalFilesDir(null).toString()).getFreeSpace();
@@ -191,7 +195,6 @@ public class VoiceReorder extends AppCompatActivity {
 
             //resetting the timer and saving the recording
             resetChronometer();
-            saveRecording();
         }
     }
 
@@ -252,9 +255,9 @@ public class VoiceReorder extends AppCompatActivity {
     private void uploadAudio() {
         progressDialog.setMessage("Uploading ...");
         progressDialog.show();
-        StorageReference filePath = storageReference.child("Recordings").child(newFIleName);
+        StorageReference filePath = storageReference.child("Recordings").child(userName).child(newFIleName+".3gp");
 
-        Uri uri = Uri.fromFile(new File(outputDir, newFIleName));
+        Uri uri = Uri.fromFile(new File(outputDir, newFIleName+".3gp"));
 
         filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -288,24 +291,24 @@ public class VoiceReorder extends AppCompatActivity {
     }
 
     //Methods to control the recordTimer
-    public void startChronometer() {
+    private void startChronometer() {
         recordTimer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
         recordTimer.start();
     }
 
-    public void pauseChronometer() {
+    private void pauseChronometer() {
         recordTimer.stop();
         pauseOffset = SystemClock.elapsedRealtime() - recordTimer.getBase();
     }
 
-    public void resetChronometer() {
+    private void resetChronometer() {
         recordTimer.stop();
         recordTimer.setBase(SystemClock.elapsedRealtime());
         pauseOffset = 0;
     }
 
     //method to get available size
-    public static String formatSize(double size) {
+    private static String formatSize(double size) {
         String suffix = null;
         if (size >= 1024) {
             suffix = "KB";

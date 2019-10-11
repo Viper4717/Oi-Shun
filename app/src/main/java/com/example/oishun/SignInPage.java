@@ -59,7 +59,7 @@ public class SignInPage extends AppCompatActivity {
     int flag = 0;
     String password;
     public void logIn(){
-        //Toast.makeText(MainActivity.this,"Dhuksi",Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"Dhuksi",Toast.LENGTH_LONG).show();
         final String name = usernameText.getText().toString();
         password = passwordText.getText().toString();
 
@@ -75,16 +75,15 @@ public class SignInPage extends AppCompatActivity {
 
                     if(logInUser.getName().equals(name) && logInUser.getPassword().equals(password)) {
                         Toast.makeText(SignInPage.this,"Successful",Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(SignInPage.this,HomePage.class);
+                        Intent intent = new Intent(SignInPage.this, HomePage.class);
+                        intent.putExtra("user_name", name);
                         flag = 1;
                         startActivity(intent);
                         break;
                     }
-
                 }
                 if(flag == 0) {
                     Toast.makeText(SignInPage.this,"Unsuccessful",Toast.LENGTH_LONG).show();
-
                 }
 
 
