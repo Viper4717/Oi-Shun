@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignUpPage"></activity>
+        <activity android:name=".UserPage"></activity>
+        <activity android:name=".SignUpPage" />
         <activity android:name=".SignInPage" />
         <activity android:name=".VoiceReorder" />
         <activity android:name=".MusicPlayer" />
