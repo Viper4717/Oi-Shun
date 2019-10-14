@@ -1,3 +1,9 @@
+/*
+ * User Page Activity Control
+ *
+ * @author A.M. Aahad
+ * */
+
 package com.example.oishun;
 
 import androidx.appcompat.app.AppCompatActivity;
