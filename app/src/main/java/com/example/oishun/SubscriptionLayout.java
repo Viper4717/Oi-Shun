@@ -18,7 +18,7 @@ public class SubscriptionLayout extends Fragment  {
 
     private ListView subscribedContentList;
     private String[] contentNames;
-    private int[] coverPhotos = {R.drawable.rock};
+    private int[] coverPhotos = {R.drawable.music_icon_image};
     View view;
 
     @Override

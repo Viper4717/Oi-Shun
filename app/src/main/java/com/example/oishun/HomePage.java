@@ -18,7 +18,7 @@ public class HomePage extends AppCompatActivity {
 
     private ListView subscribedContentList;
     private String[] contentNames;
-    private int[] coverPhotos = {R.drawable.rock};
+    private int[] coverPhotos = {R.drawable.music_icon_image};
     FloatingActionButton recordActionButton;
     String userName;
 

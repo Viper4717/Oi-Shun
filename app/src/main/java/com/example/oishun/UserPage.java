@@ -9,7 +9,7 @@ public class UserPage extends AppCompatActivity {
 
     ListView personalContentView;
     String[] personalContentNames;
-    private int[] coverPhotos = {R.drawable.rock};
+    private int[] coverPhotos = {R.drawable.music_icon_image};
 
 
     @Override
