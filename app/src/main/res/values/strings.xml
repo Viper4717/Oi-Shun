@@ -3,8 +3,8 @@
     <string name="recordbutton">recordButton</string>
     <string name="pausebutton">pauseButton</string>
     <string name="backbutton">backButton</string>
-    <string name="tab_text_1">Subscriptions</string>
-    <string name="tab_text_2">Explore</string>
+    <string name="tab_text_1">Explore</string>
+    <string name="tab_text_2">Subscriptions</string>
     <string name="_0_00">0:00</string>
     <string name="_3_00">-3:00</string>
     <string name="audioart">AudioArt</string>

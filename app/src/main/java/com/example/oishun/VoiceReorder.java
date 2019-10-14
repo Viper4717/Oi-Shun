@@ -14,16 +14,13 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.StatFs;
 import android.os.SystemClock;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -40,11 +37,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 public class VoiceReorder extends AppCompatActivity {
 
@@ -201,7 +196,7 @@ public class VoiceReorder extends AppCompatActivity {
     //method to save the recording with custom name
     private void saveRecording() {
         LayoutInflater li = LayoutInflater.from(this);
-        View promptsView = li.inflate(R.layout.set_file_name, null);
+        View promptsView = li.inflate(R.layout.activity_set_file_name, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 

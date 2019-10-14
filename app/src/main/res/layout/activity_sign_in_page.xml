@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="90dp"
         android:fontFamily="@font/audiowide_regular"
-        android:text="Oi Shun"
+        android:text="Oi Shun!"
         android:textColor="#000000"
         android:textSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
