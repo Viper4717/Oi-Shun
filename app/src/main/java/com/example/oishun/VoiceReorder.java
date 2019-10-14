@@ -154,13 +154,13 @@ public class VoiceReorder extends AppCompatActivity {
             //preparing the mediaRecorder
             mediaRecorder =  new MediaRecorder();
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.HE_AAC);
             Date date = new Date();
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
                     .format(date.getTime());
             oldFileName = timeStamp;
-            mediaRecorder.setOutputFile(outputDir+File.separator+oldFileName+".3gp");
+            mediaRecorder.setOutputFile(outputDir+File.separator+oldFileName+".mp3");
 
             //starting the mediaRecorder
             try{
@@ -220,8 +220,8 @@ public class VoiceReorder extends AppCompatActivity {
             public void onClick(View v) {
                 newFIleName = userInput.getText().toString();
                 if (newFIleName != null && newFIleName.trim().length() > 0) {
-                    File newFile = new File(outputDir, newFIleName+".3gp");
-                    File oldFile = new File(outputDir, oldFileName+".3gp");
+                    File newFile = new File(outputDir, newFIleName+".mp3");
+                    File oldFile = new File(outputDir, oldFileName+".mp3");
                     oldFile.renameTo(newFile);
                     uploadAudio();
                     oldFileName = null;
@@ -234,8 +234,8 @@ public class VoiceReorder extends AppCompatActivity {
             public void onClick(View v) {
                 newFIleName = userInput.getText().toString();
                 if (newFIleName != null && newFIleName.trim().length() > 0) {
-                    File newFile = new File(outputDir, newFIleName+".3gp");
-                    File oldFile = new File(outputDir, oldFileName+".3gp");
+                    File newFile = new File(outputDir, newFIleName+".mp3");
+                    File oldFile = new File(outputDir, oldFileName+".mp3");
                     oldFile.renameTo(newFile);
                     oldFileName = null;
                     alertDialog.dismiss();
@@ -250,9 +250,9 @@ public class VoiceReorder extends AppCompatActivity {
     private void uploadAudio() {
         progressDialog.setMessage("Uploading ...");
         progressDialog.show();
-        StorageReference filePath = storageReference.child("Recordings").child(userName).child(newFIleName+".3gp");
+        StorageReference filePath = storageReference.child("Recordings").child(userName).child(newFIleName+".mp3");
 
-        Uri uri = Uri.fromFile(new File(outputDir, newFIleName+".3gp"));
+        Uri uri = Uri.fromFile(new File(outputDir, newFIleName+".mp3"));
 
         filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
