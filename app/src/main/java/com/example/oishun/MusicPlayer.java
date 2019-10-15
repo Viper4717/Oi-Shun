@@ -32,7 +32,7 @@ public class MusicPlayer extends AppCompatActivity {
         remainingTimeLabel = (TextView) findViewById(R.id.remainingTimeLabel);
 
         // Media Player
-        //mp = MediaPlayer.create(this,R.raw.music);
+        mp = MediaPlayer.create(this,R.raw.music);
         mp.setLooping(true);
         mp.seekTo(0);
         mp.setVolume(0.5f, 0.5f);
