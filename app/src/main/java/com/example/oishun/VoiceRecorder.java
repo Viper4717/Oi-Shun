@@ -44,7 +44,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class VoiceReorder extends AppCompatActivity {
+public class VoiceRecorder extends AppCompatActivity {
 
     ImageButton recordButton;
     ImageButton pauseButton;
@@ -257,7 +257,7 @@ public class VoiceReorder extends AppCompatActivity {
     private void uploadAudio() {
         progressDialog.setMessage("Uploading ...");
         progressDialog.show();
-        StorageReference filePath = storageReference.child("Recordings").child(userName).child(newFIleName+".mp3");
+        final StorageReference filePath = storageReference.child("Recordings").child(userName).child(newFIleName+".mp3");
 
         Uri uri = Uri.fromFile(new File(outputDir, newFIleName+".mp3"));
 
@@ -266,6 +266,7 @@ public class VoiceReorder extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 progressDialog.dismiss();
                 recordingDetails.setRecordingURL(taskSnapshot.getStorage().getDownloadUrl().toString());
+                //recordingDetails.setRecordingURL(filePath.getDownloadUrl().toString());
                 recordingDetails.setRecordingName(newFIleName);
                 recordingDetails.setRecordingUploader(userName);
                 String uploadID = databaseReference.push().getKey();

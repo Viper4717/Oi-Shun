@@ -85,7 +85,7 @@ public class SubscriptionLayout extends Fragment  {
                 Intent intent = new Intent(context,MusicPlayer.class);
                 intent.putExtra("recordingURL", rec.getRecordingURL());
                 intent.putExtra("recordingName",rec.getRecordingName());
-                intent.putExtra("redordingUploader",rec.getRecordingUploader());
+                intent.putExtra("recordingUploader",rec.getRecordingUploader());
                 startActivity(intent);
             }
         });

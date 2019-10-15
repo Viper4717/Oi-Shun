@@ -1,6 +1,7 @@
 package com.example.oishun;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -39,6 +40,9 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
     String playingURL;
     String imageURL;
     String recordingName;
+    String userName;
+    TextView recordNameText;
+    TextView userNameText;
     int totalTime;
     final int REQUEST_PERMISSION_CODE = 1000;
     @Override
@@ -47,12 +51,22 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
 
+        Intent intent = getIntent();
+        //playingURL = intent.getStringExtra("recordingURL");
+        Toast.makeText(this, playingURL, Toast.LENGTH_SHORT).show();
+        recordingName = intent.getStringExtra("recordingName");
+        userName = intent.getStringExtra("recordingUploader");
+
         if(!checkPermissionFromDevice())
             requestPermissionFromDevice();
 
         playButton = (ImageButton)findViewById(R.id.playButton);
         elapsedTimeLabel = (TextView) findViewById(R.id.elapsedTimeLabel);
         remainingTimeLabel = (TextView) findViewById(R.id.remainingTimeLabel);
+        recordNameText = (TextView) findViewById(R.id.recordNameText);
+        userNameText = (TextView) findViewById(R.id.userNameText);
+        recordNameText.setText(recordingName);
+        userNameText.setText(userName);
 
         // Media Player
         //mp = MediaPlayer.create(this,R.raw.music);

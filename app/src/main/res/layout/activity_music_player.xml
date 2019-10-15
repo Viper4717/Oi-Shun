@@ -58,7 +58,7 @@
 
         android:background="?android:selectableItemBackground"
         android:contentDescription="@string/play"
-        android:src="@drawable/play"
+        android:src="@drawable/stop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="@string/_0_00"
+        android:text="@string/elapsedTimeInitial"
         android:textColor="@color/oiShunYellow"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -125,7 +125,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:text="@string/_3_00"
+        android:text="@string/remainingTimeInitial"
         android:textColor="@color/oiShunYellow"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -133,6 +133,30 @@
         app:layout_constraintTop_toBottomOf="@+id/volumeButton"
         app:layout_constraintVertical_bias="0.412"
         tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/recordNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Recording Name"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+    <TextView
+        android:id="@+id/userNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/archivo_regular"
+        android:text="User Name"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recordNameText" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
