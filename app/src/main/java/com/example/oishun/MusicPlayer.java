@@ -1,5 +1,6 @@
 package com.example.oishun;
 
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,8 +10,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
 
 
 public class MusicPlayer extends AppCompatActivity {
@@ -32,25 +36,43 @@ public class MusicPlayer extends AppCompatActivity {
         remainingTimeLabel = (TextView) findViewById(R.id.remainingTimeLabel);
 
         // Media Player
-        mp = MediaPlayer.create(this,R.raw.music);
+        //mp = MediaPlayer.create(this,R.raw.music);
+        mp = new MediaPlayer();
+        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        String url = "https://firebasestorage.googleapis.com/v0/b/oishun-73200.appspot.com/o/Recordings%2Ftest%2Fabcd.mp3?alt=media&token=a3e7bd3e-f59c-441d-bcfe-566a4bf7a849";
+        try {
+            mp.setDataSource(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         mp.setLooping(true);
         mp.seekTo(0);
         mp.setVolume(0.5f, 0.5f);
         totalTime = mp.getDuration();
 
+        Toast.makeText(this, ""+totalTime, Toast.LENGTH_SHORT).show();
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mp.isPlaying()) {
                     // Stopping
-                    mp.start();
+                    try {
+                        mp.prepare();
+                        mp.start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     playButton.setImageResource(R.drawable.stop);
 
                 } else {
                     // Playing
                     mp.pause();
                     playButton.setImageResource(R.drawable.play);
-                }       }
+                }
+            }
         });
 
         // Seek Bar
