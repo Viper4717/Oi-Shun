@@ -1,5 +1,7 @@
 package com.example.oishun;
 
+import android.net.Uri;
+
 public class Recording {
 
     public Recording(){
@@ -10,6 +12,7 @@ public class Recording {
     private String recordingURL;
     private String recordingUploader;
     private String recordingImageURL;
+    private String recordingDuration;
 
     public String getRecordingDuration() {
         return recordingDuration;
@@ -19,7 +22,7 @@ public class Recording {
         this.recordingDuration = recordingDuration;
     }
 
-    private String recordingDuration;
+
 
     public String getRecordingName() {
         return recordingName;

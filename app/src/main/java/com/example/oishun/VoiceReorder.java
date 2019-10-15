@@ -16,6 +16,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -54,11 +57,13 @@ public class VoiceReorder extends AppCompatActivity {
     boolean paused = true;
     final int REQUEST_PERMISSION_CODE = 1000;
     StorageReference storageReference;
+    DatabaseReference databaseReference;
     ProgressDialog progressDialog;
     String outputDir;
     String oldFileName;
     String newFIleName;
     String userName;
+    Recording recordingDetails;
     long pauseOffset;
 
     @Override
@@ -78,6 +83,7 @@ public class VoiceReorder extends AppCompatActivity {
         storageRemaining = (TextView) findViewById(R.id.storageRemaining);
         pausedStatus = (TextView) findViewById(R.id.pausedStatus);
         storageReference = FirebaseStorage.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference("recordings");
         progressDialog = new ProgressDialog(this);
         oldFileName = null;
         newFIleName = null;
@@ -89,6 +95,7 @@ public class VoiceReorder extends AppCompatActivity {
         storageRemaining.setText(formatSize(freeBytesExternal));
         Intent tempIntent = getIntent();
         userName = tempIntent.getStringExtra("user_name");
+        recordingDetails = new Recording();
 
         //Recordbutton action
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -258,8 +265,14 @@ public class VoiceReorder extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 progressDialog.dismiss();
+                recordingDetails.setRecordingURL(taskSnapshot.getStorage().getDownloadUrl().toString());
+                recordingDetails.setRecordingName(newFIleName);
+                recordingDetails.setRecordingUploader(userName);
+                String uploadID = databaseReference.push().getKey();
+                databaseReference.child(uploadID).setValue(recordingDetails);
             }
         });
+
     }
 
     //Method for pausing
