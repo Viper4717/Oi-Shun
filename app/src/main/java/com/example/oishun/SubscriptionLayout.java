@@ -7,19 +7,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubscriptionLayout extends Fragment  {
 
+    Context context;
     private ListView subscribedContentList;
-    private String[] contentNames;
+    List<Recording> contents;
+    //String[] names;
     private int[] coverPhotos = {R.drawable.music_icon_image};
     View view;
+    DatabaseReference ref;
+    Recording recording;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,15 +42,86 @@ public class SubscriptionLayout extends Fragment  {
     }
 
     public void addContentList(){
-        final Context context = getActivity().getApplicationContext();
+        //System.out.println("hello");
+        context = getActivity().getApplicationContext();
         subscribedContentList = (ListView) view.findViewById(R.id.subscription_contents);
-        contentNames = getResources().getStringArray(R.array.contentNames);
 
+        //contentNames = getResources().getStringArray(R.array.contentNames);
+
+        contents = new ArrayList<>();
         subscribedContentList = (ListView)  view.findViewById(R.id.subscription_contents);
-        contentNames = getResources().getStringArray(R.array.contentNames);
+        ref = FirebaseDatabase.getInstance().getReference().child("recordings");
+        //contentNames = getResources().getStringArray(R.array.contentNames);
+        //System.out.println("hello");
 
-        CustomAdapter adapter = new CustomAdapter(context,contentNames,coverPhotos);
-        subscribedContentList.setAdapter(adapter);
+
+       /* ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    recording = ds.getValue(Recording.class);
+                    contents.add(recording);
+                    System.out.println(contents.size());
+                    System.out.println(recording.getRecordingName());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });*/
+
+
+
+        //System.out.println(contents.size());
+        addListNames();
+
+        //System.out.println(names[0]);
+
+
+    }
+
+
+    public void addListNames(){
+
+
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    recording = ds.getValue(Recording.class);
+                    contents.add(recording);
+
+                }
+                String[] names = new String[contents.size()];
+
+                for(int i = 0 ; i < names.length ; i++){
+                    names[i] = contents.get(i).getRecordingName();
+                }
+
+                String[] uploaders = new String[contents.size()];
+
+                for(int i = 0 ; i < names.length ; i++){
+                    uploaders[i] = contents.get(i).getRecordingUploader();
+                }
+
+                CustomAdapter adapter = new CustomAdapter(context,names,coverPhotos,uploaders);
+                //CustomAdapter adapter = new CustomAdapter(context,contentNames,coverPhotos);
+                subscribedContentList.setAdapter(adapter);
+            }
+
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //System.out.println("hello");
+
     }
 
     @Nullable

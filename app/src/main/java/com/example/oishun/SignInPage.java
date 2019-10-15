@@ -26,8 +26,10 @@ public class SignInPage extends AppCompatActivity {
     TextView signUpText;
     DatabaseReference ref;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in_page);
         //Toast.makeText(MainActivity.this,"asfdafs",Toast.LENGTH_LONG).show();
@@ -54,6 +56,7 @@ public class SignInPage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
     }
     int flag = 0;
