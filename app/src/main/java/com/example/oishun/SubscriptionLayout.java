@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -76,6 +77,18 @@ public class SubscriptionLayout extends Fragment  {
 
         //System.out.println(contents.size());
         addListNames();
+
+        subscribedContentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Recording rec = contents.get(position);
+                Intent intent = new Intent(context,MusicPlayer.class);
+                intent.putExtra("recordingURL", rec.getRecordingURL());
+                intent.putExtra("recordingName",rec.getRecordingName());
+                intent.putExtra("redordingUploader",rec.getRecordingUploader());
+                startActivity(intent);
+            }
+        });
 
         //System.out.println(names[0]);
 
