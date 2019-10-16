@@ -80,6 +80,7 @@ public class SignInPage extends AppCompatActivity {
                         Toast.makeText(SignInPage.this,"Successful",Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(SignInPage.this, HomePage.class);
                         intent.putExtra("user_name", name);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         flag = 1;
                         startActivity(intent);
                         break;
