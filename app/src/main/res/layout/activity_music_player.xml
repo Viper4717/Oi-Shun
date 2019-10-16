@@ -21,18 +21,16 @@
 
     <ImageButton
         android:id="@+id/backButton"
-        android:layout_width="31dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="18dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/back_button_image"
         android:clickable="true"
         android:contentDescription="@string/backbutton"
         android:focusable="true"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/round_button"
         tools:srcCompat="@drawable/round_button" />
 

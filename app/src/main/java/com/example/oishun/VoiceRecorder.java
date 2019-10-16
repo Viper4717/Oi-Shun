@@ -16,7 +16,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -71,7 +70,7 @@ public class VoiceRecorder extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_voice_reorder);
+        setContentView(R.layout.activity_voice_recorder);
 
         //Seeking permission from device to write and record
         if(!checkPermissionFromDevice())

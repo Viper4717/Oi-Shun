@@ -75,17 +75,16 @@
         android:id="@+id/backButton"
         android:layout_width="18dp"
         android:layout_height="32dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/back_button_image"
         android:clickable="true"
         android:contentDescription="@string/backbutton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.073"
+        android:focusable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/round_button"
-        tools:srcCompat="@drawable/round_button"
-        android:focusable="true" />
+        tools:srcCompat="@drawable/round_button" />
 
     <TextView
         android:id="@+id/pausedStatus"
