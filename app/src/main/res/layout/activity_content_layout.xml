@@ -55,6 +55,7 @@
                 android:fontFamily="@font/archivo_regular"
                 />
             <TextView
+                android:id="@+id/duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4:03"

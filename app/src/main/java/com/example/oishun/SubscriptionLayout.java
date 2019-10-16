@@ -86,6 +86,7 @@ public class SubscriptionLayout extends Fragment  {
                 intent.putExtra("recordingURL", rec.getRecordingURL());
                 intent.putExtra("recordingName",rec.getRecordingName());
                 intent.putExtra("recordingUploader",rec.getRecordingUploader());
+                //intent.putExtra("recordingDuration",rec.getRecordingDuration());
                 startActivity(intent);
             }
         });
@@ -101,6 +102,7 @@ public class SubscriptionLayout extends Fragment  {
 
 
         ref.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
@@ -120,7 +122,14 @@ public class SubscriptionLayout extends Fragment  {
                     uploaders[i] = contents.get(i).getRecordingUploader();
                 }
 
-                CustomAdapter adapter = new CustomAdapter(context,names,coverPhotos,uploaders);
+                String[] durations = new String[contents.size()];
+
+                for(int i = 0 ; i < names.length ; i++){
+                    durations[i] = contents.get(i).getRecordingDuration();
+                }
+                contents.clear();
+
+                CustomAdapter adapter = new CustomAdapter(context,names,coverPhotos,uploaders,durations);
                 //CustomAdapter adapter = new CustomAdapter(context,contentNames,coverPhotos);
                 subscribedContentList.setAdapter(adapter);
             }
@@ -147,3 +156,5 @@ public class SubscriptionLayout extends Fragment  {
         return view;
     }
 }
+//htt"gs://oishun-73200.appspot.com/Recordings/test/please%20God.mp3"
+//gs://oishun-73200.appspot.com/Recordings/test/please God.mp3

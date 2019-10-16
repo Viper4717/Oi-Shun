@@ -17,12 +17,14 @@ public class CustomAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private String[] uploaderNames;
+    private String[] durations;
 
-    public CustomAdapter(Context context, String[] contentNames, int[] coverPhotos, String[] uploaderNames) {
+    public CustomAdapter(Context context, String[] contentNames, int[] coverPhotos, String[] uploaderNames,String[] durations) {
         this.context = context;
         this.contentNames = contentNames;
         this.coverPhotos = coverPhotos;
         this.uploaderNames = uploaderNames;
+        this.durations = durations;
     }
 
     @Override
@@ -50,10 +52,12 @@ public class CustomAdapter extends BaseAdapter {
             ImageView coverPhotoImage = (ImageView) convertView.findViewById(R.id.audio_cover_photo);
             TextView contentNameText = (TextView) convertView.findViewById(R.id.content_name_text);
             TextView artistName = convertView.findViewById(R.id.artist_name);
+            TextView durationText = convertView.findViewById(R.id.duration);
           //  String name = contentNames[position];
             coverPhotoImage.setImageResource(coverPhotos[position % 1]);
             contentNameText.setText(contentNames[position]);
             artistName.setText(uploaderNames[position]);
+            durationText.setText(durations[position]);
         }
         return convertView;
     }
