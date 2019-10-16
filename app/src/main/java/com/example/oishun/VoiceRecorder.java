@@ -63,6 +63,8 @@ public class VoiceRecorder extends AppCompatActivity {
     String oldFileName;
     String newFIleName;
     String userName;
+    long intDuration;
+    String recordDuration;
     Recording recordingDetails;
     long pauseOffset;
 
@@ -189,14 +191,15 @@ public class VoiceRecorder extends AppCompatActivity {
             mediaRecorder.stop();
             mediaRecorder.release();
             mediaRecorder = null;
+
+            //resetting the timer and saving the recording
+            intDuration = resetChronometer();
+            recordDuration = createTimeLabel(intDuration);
             saveRecording();
 
             //getting the available free space again
             long freeBytesExternal = new File(getExternalFilesDir(null).toString()).getFreeSpace();
             storageRemaining.setText(formatSize(freeBytesExternal));
-
-            //resetting the timer and saving the recording
-            resetChronometer();
         }
     }
 
@@ -273,6 +276,7 @@ public class VoiceRecorder extends AppCompatActivity {
                         recordingDetails.setRecordingURL(downloadURL);
                         recordingDetails.setRecordingName(newFIleName);
                         recordingDetails.setRecordingUploader(userName);
+                        recordingDetails.setRecordingDuration(recordDuration);
                         String uploadID = databaseReference.push().getKey();
                         databaseReference.child(uploadID).setValue(recordingDetails);
                     }
@@ -316,10 +320,22 @@ public class VoiceRecorder extends AppCompatActivity {
         pauseOffset = SystemClock.elapsedRealtime() - recordTimer.getBase();
     }
 
-    private void resetChronometer() {
+    private long resetChronometer() {
         recordTimer.stop();
+        long finishTime = SystemClock.elapsedRealtime() - recordTimer.getBase();
         recordTimer.setBase(SystemClock.elapsedRealtime());
         pauseOffset = 0;
+        return finishTime;
+    }
+
+    public String createTimeLabel(long time) {
+        String timeLabel = "";
+        long min = time / 1000 / 60;
+        long sec = time / 1000 % 60;
+        timeLabel = min + ":";
+        if (sec < 10) timeLabel += "0";
+        timeLabel += sec;
+        return timeLabel;
     }
 
     //method to get available size
