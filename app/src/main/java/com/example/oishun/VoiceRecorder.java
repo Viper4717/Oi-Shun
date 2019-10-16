@@ -265,12 +265,18 @@ public class VoiceRecorder extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 progressDialog.dismiss();
-                recordingDetails.setRecordingURL(taskSnapshot.getStorage().getDownloadUrl().toString());
-                //recordingDetails.setRecordingURL(filePath.getDownloadUrl().toString());
-                recordingDetails.setRecordingName(newFIleName);
-                recordingDetails.setRecordingUploader(userName);
-                String uploadID = databaseReference.push().getKey();
-                databaseReference.child(uploadID).setValue(recordingDetails);
+                filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String downloadURL = uri.toString();
+                        //recordingDetails.setRecordingURL(taskSnapshot.getStorage().getDownloadUrl().toString());
+                        recordingDetails.setRecordingURL(downloadURL);
+                        recordingDetails.setRecordingName(newFIleName);
+                        recordingDetails.setRecordingUploader(userName);
+                        String uploadID = databaseReference.push().getKey();
+                        databaseReference.child(uploadID).setValue(recordingDetails);
+                    }
+                });
             }
         });
 

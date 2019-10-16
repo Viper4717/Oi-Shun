@@ -52,8 +52,8 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
         setContentView(R.layout.activity_music_player);
 
         Intent intent = getIntent();
-        //playingURL = intent.getStringExtra("recordingURL");
-        Toast.makeText(this, playingURL, Toast.LENGTH_SHORT).show();
+        playingURL = intent.getStringExtra("recordingURL");
+        //Toast.makeText(this, playingURL, Toast.LENGTH_SHORT).show();
         recordingName = intent.getStringExtra("recordingName");
         userName = intent.getStringExtra("recordingUploader");
 
@@ -124,7 +124,7 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
         final FirebaseStorage storage = FirebaseStorage.getInstance();
         // Create a storage reference from our app
         //Toast.makeText(MusicPlayer.this, "SUCCESS", Toast.LENGTH_SHORT).show();
-        playingURL = "https://firebasestorage.googleapis.com/v0/b/oishun-73200.appspot.com/o/Recordings%2Ftest%2Fabcd.mp3?alt=media&token=a3e7bd3e-f59c-441d-bcfe-566a4bf7a849";
+        //playingURL = "https://firebasestorage.googleapis.com/v0/b/oishun-73200.appspot.com/o/Recordings%2Ftest%2Fabcd.mp3?alt=media&token=a3e7bd3e-f59c-441d-bcfe-566a4bf7a849";
         StorageReference storageRef = storage.getReferenceFromUrl(playingURL);
         //Toast.makeText(MusicPlayer.this,storageRef.getDownloadUrl().toString(),Toast.LENGTH_LONG).show();
         storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
