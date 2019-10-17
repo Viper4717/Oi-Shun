@@ -90,7 +90,7 @@ public class SubscriptionLayout extends Fragment  {
                 startActivity(intent);
             }
         });
-
+        contents.clear();
         //System.out.println(names[0]);
 
 
@@ -127,7 +127,6 @@ public class SubscriptionLayout extends Fragment  {
                 for(int i = 0 ; i < names.length ; i++){
                     durations[i] = contents.get(i).getRecordingDuration();
                 }
-                contents.clear();
 
                 CustomAdapter adapter = new CustomAdapter(context,names,coverPhotos,uploaders,durations);
                 //CustomAdapter adapter = new CustomAdapter(context,contentNames,coverPhotos);
