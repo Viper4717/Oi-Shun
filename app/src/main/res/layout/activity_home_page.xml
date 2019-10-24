@@ -8,17 +8,6 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigationBar"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/backgroundColor"
-        app:itemIconTint="@color/colorAccent"
-        app:itemTextColor="@color/colorAccent"
-        app:layout_constraintTop_toBottomOf="@+id/linearHead"
-        app:menu="@menu/navigation_menu"></com.google.android.material.navigation.NavigationView>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -99,7 +88,16 @@
                 app:tabTextColor="@color/oiShunYellow" />
 
         </androidx.viewpager.widget.ViewPager>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationBar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/backgroundColor"
+        app:itemIconTint="@color/colorAccent"
+        app:itemTextColor="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@+id/linearHead"
+        app:menu="@menu/navigation_menu"/>
 </androidx.drawerlayout.widget.DrawerLayout>

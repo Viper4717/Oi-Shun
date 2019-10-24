@@ -35,26 +35,32 @@ public class UserPage extends AppCompatActivity {
     TextView userNameText;
     Button subscribeButton;
     Recording recording;
-
+    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_page);
 
+        Intent intent = getIntent();
+        userName = intent.getStringExtra("user_name");
+        String ownProfile = intent.getStringExtra("own_profile");
+
         personalRecordings = new ArrayList<>();
         userImage = (ImageView) findViewById(R.id.userImage);
         userNameText = (TextView) findViewById(R.id.userNameText);
         subscribeButton = (Button) findViewById(R.id.subscribeButton);
-        //Intent tempIntent = getIntent();
-        //String userName = tempIntent.getStringExtra("user_name");
-        //userNameText.setText(userName);
+
+        userNameText.setText(userName);
+        if(ownProfile.equals("yes")){
+            subscribeButton.setEnabled(false);
+        }
 
         personalContentNames = getResources().getStringArray(R.array.contentNames);
 
         personalContentView = findViewById(R.id.personal_contents);
 
-        Query query = FirebaseDatabase.getInstance().getReference("recordings").orderByChild("recordingUploader").equalTo("viper4717");
+        Query query = FirebaseDatabase.getInstance().getReference("recordings").orderByChild("recordingUploader").equalTo(userName);
         query.addListenerForSingleValueEvent(valueEventListener);
 
         // UserAdapter userAdapter = new UserAdapter(this,personalContentNames,coverPhotos);
