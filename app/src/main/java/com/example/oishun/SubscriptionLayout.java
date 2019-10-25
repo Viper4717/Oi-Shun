@@ -90,7 +90,7 @@ public class SubscriptionLayout extends Fragment  {
                 startActivity(intent);
             }
         });
-        contents.clear();
+        //contents.clear();
         //System.out.println(names[0]);
 
 
@@ -105,6 +105,7 @@ public class SubscriptionLayout extends Fragment  {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                contents.clear();
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     recording = ds.getValue(Recording.class);
                     contents.add(recording);
