@@ -7,26 +7,34 @@
 package com.example.oishun;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.loader.content.CursorLoader;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +74,8 @@ public class VoiceRecorder extends AppCompatActivity {
     String recordDuration;
     Recording recordingDetails;
     long pauseOffset;
+    int RESULT_LOAD_IMAGE;
+    //ImageView coverImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +107,8 @@ public class VoiceRecorder extends AppCompatActivity {
         Intent tempIntent = getIntent();
         userName = tempIntent.getStringExtra("user_name");
         recordingDetails = new Recording();
+        RESULT_LOAD_IMAGE = 1;
+        //coverImage = (ImageView) findViewById(R.id.coverImage);
 
         //Recordbutton action
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -212,6 +224,8 @@ public class VoiceRecorder extends AppCompatActivity {
         //set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
 
+        //Button chooseImageButton = promptsView.findViewById(R.id.chooseImageButton);
+        //final ImageView coverImage = promptsView.findViewById(R.id.coverImage);
         final EditText userInput = (EditText) promptsView.findViewById(R.id.edit_file_name);
         userInput.setText(oldFileName);
         userInput.setSelection(userInput.length());
@@ -223,6 +237,23 @@ public class VoiceRecorder extends AppCompatActivity {
 
         //create alert dialog
         final AlertDialog alertDialog = alertDialogBuilder.create();
+
+        /*chooseImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent imageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                //startActivityForResult(imageIntent, RESULT_LOAD_IMAGE);
+
+                //Intent imageIntent = new Intent();
+                //imageIntent.setType("image/*");
+                //imageIntent.setAction(Intent.ACTION_GET_CONTENT);
+                //startActivityForResult(Intent.createChooser(imageIntent, "Select Picture"),RESULT_LOAD_IMAGE);
+
+                Intent imageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(imageIntent, RESULT_LOAD_IMAGE);
+            }
+        });*/
+
 
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,11 +279,34 @@ public class VoiceRecorder extends AppCompatActivity {
                     oldFile.renameTo(newFile);
                     oldFileName = null;
                     alertDialog.dismiss();
+                    Toast.makeText(VoiceRecorder.this, "Saved", Toast.LENGTH_SHORT).show();
                 }
             }
         });
         //showing it
         alertDialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null){
+            //Toast.makeText(this, "ei function e dhukse", Toast.LENGTH_LONG).show();
+            LayoutInflater li = LayoutInflater.from(this);
+            View promptsView = li.inflate(R.layout.activity_set_file_name, null);
+            //ImageView coverImage = promptsView.findViewById(R.id.coverImage);
+            //Uri selectedImage = data.getData();
+            //coverImage.setImageURI(selectedImage);
+
+            /*Uri filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), filePath);
+                //Bitmap bitmap = BitmapFactory.decodeFile(filePath.toString());
+                coverImage.setImageBitmap(bitmap);
+            } catch (Exception e){
+                e.printStackTrace();
+            }*/
+        }
     }
 
     //method to upload audio files to Firebase
@@ -280,6 +334,7 @@ public class VoiceRecorder extends AppCompatActivity {
                         databaseReference.child(uploadID).setValue(recordingDetails);
                     }
                 });
+                Toast.makeText(VoiceRecorder.this, "Upload Successful!", Toast.LENGTH_SHORT).show();
             }
         });
 
