@@ -39,7 +39,6 @@ public class SubscriptionLayout extends Fragment  {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     public void addContentList(){
@@ -99,8 +98,6 @@ public class SubscriptionLayout extends Fragment  {
 
     public void addListNames(){
 
-
-
         ref.addValueEventListener(new ValueEventListener() {
 
             @Override
@@ -109,7 +106,6 @@ public class SubscriptionLayout extends Fragment  {
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     recording = ds.getValue(Recording.class);
                     contents.add(recording);
-
                 }
                 String[] names = new String[contents.size()];
 

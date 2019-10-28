@@ -10,17 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +41,8 @@ public class UserPage extends AppCompatActivity {
     Button subscribeButton;
     Recording recording;
     String userName;
+    User user;
+    FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,7 @@ public class UserPage extends AppCompatActivity {
         userImage = (ImageView) findViewById(R.id.userImage);
         userNameText = (TextView) findViewById(R.id.userNameText);
         subscribeButton = (Button) findViewById(R.id.subscribeButton);
+        storage = FirebaseStorage.getInstance();
 
         userNameText.setText(userName);
         if(ownProfile.equals("yes")){
@@ -59,6 +67,9 @@ public class UserPage extends AppCompatActivity {
         personalContentNames = getResources().getStringArray(R.array.contentNames);
 
         personalContentView = findViewById(R.id.personal_contents);
+
+        Query userClassQuery = FirebaseDatabase.getInstance().getReference("user").orderByChild("name").equalTo(userName);
+        userClassQuery.addListenerForSingleValueEvent(userImageListener);
 
         Query query = FirebaseDatabase.getInstance().getReference("recordings").orderByChild("recordingUploader").equalTo(userName);
         query.addListenerForSingleValueEvent(valueEventListener);
@@ -102,6 +113,22 @@ public class UserPage extends AppCompatActivity {
             }
         }
 
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
+    ValueEventListener userImageListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if (dataSnapshot.exists()) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    user = ds.getValue(User.class);
+                }
+                Glide.with(getApplicationContext()).load(user.getUserAvatarURL()).into(userImage);
+            }
+        }
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
 

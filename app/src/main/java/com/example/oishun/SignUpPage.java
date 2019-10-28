@@ -1,3 +1,9 @@
+/*
+ * Sign Up Page activity control
+ *
+ * @author A.M. Aahad, KB Yamin Rupom
+ * */
+
 package com.example.oishun;
 
 import androidx.annotation.NonNull;
