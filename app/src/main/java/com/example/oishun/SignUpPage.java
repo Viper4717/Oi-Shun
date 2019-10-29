@@ -116,11 +116,11 @@ public class SignUpPage extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
                             String downloadURL = uri.toString();
                             user.setUserAvatarURL(downloadURL);
-                            ref.child(user.getName()).setValue(user);
                         }
                     });
                 }
             });
+            ref.child(user.getName()).setValue(user);
             Toast.makeText(SignUpPage.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
             return  true;
         }
