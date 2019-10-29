@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -47,6 +48,7 @@ public class SignUpPage extends AppCompatActivity {
     DatabaseReference ref;
     TextView signInText;
     int RESULT_LOAD_IMAGE;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class SignUpPage extends AppCompatActivity {
         retypePassword = findViewById(R.id.signUpConfirmPassword);
         userAvatar = findViewById(R.id.userAvatar);
         avatarChooseButton = findViewById(R.id.avatarChoosebutton);
+        progressDialog = new ProgressDialog(this);
         RESULT_LOAD_IMAGE = 1;
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +100,8 @@ public class SignUpPage extends AppCompatActivity {
         String confirmPass = retypePassword.getText().toString().trim();
 
         if(pass.equals(confirmPass)) {
+            progressDialog.setMessage("Registering...");
+            progressDialog.show();
             user = new User();
             user.setName(name);
             user.setPassword(pass);
@@ -111,18 +116,19 @@ public class SignUpPage extends AppCompatActivity {
             filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss();
                     filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             String downloadURL = uri.toString();
                             user.setUserAvatarURL(downloadURL);
+                            ref.child(user.getName()).setValue(user);
                         }
                     });
+                    Toast.makeText(SignUpPage.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
                 }
             });
-            ref.child(user.getName()).setValue(user);
-            Toast.makeText(SignUpPage.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-            return  true;
+            return true;
         }
 
         else{
