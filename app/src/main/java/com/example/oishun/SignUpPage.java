@@ -72,8 +72,8 @@ public class SignUpPage extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean reg = register();
-                if(reg) startActivity(new Intent(SignUpPage.this,SignInPage.class));
+                register();
+                //if(reg) startActivity(new Intent(SignUpPage.this,SignInPage.class));
             }
         });
         signInText.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +94,7 @@ public class SignUpPage extends AppCompatActivity {
 
     }
 
-    public boolean register(){
+    public void register(){
         String name = username.getText().toString().trim();
         String pass = password.getText().toString().trim();
         String confirmPass = retypePassword.getText().toString().trim();
@@ -128,13 +128,19 @@ public class SignUpPage extends AppCompatActivity {
                     Toast.makeText(SignUpPage.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
                 }
             });
-            return true;
+
+            filePath.putFile(uri).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
+                    Toast.makeText(SignUpPage.this, "Kam Korenai", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         else{
             Toast.makeText(this, "Passwords don't match!", Toast.LENGTH_SHORT).show();
         }
-        return false;
     }
 
     @Override

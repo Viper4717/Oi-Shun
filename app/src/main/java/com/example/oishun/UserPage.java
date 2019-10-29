@@ -50,8 +50,9 @@ public class UserPage extends AppCompatActivity {
         setContentView(R.layout.activity_user_page);
 
         Intent intent = getIntent();
-        userName = intent.getStringExtra("user_name");
-        String ownProfile = intent.getStringExtra("own_profile");
+        userName = intent.getStringExtra("user_search");
+
+       // String ownProfile = intent.getStringExtra("own_profile");
 
         personalRecordings = new ArrayList<>();
         userImage = (ImageView) findViewById(R.id.userImage);
@@ -60,9 +61,9 @@ public class UserPage extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
 
         userNameText.setText(userName);
-        if(ownProfile.equals("yes")){
-            subscribeButton.setEnabled(false);
-        }
+       // if(ownProfile.equals("yes")){
+         //   subscribeButton.setEnabled(false);
+        //}
 
         personalContentNames = getResources().getStringArray(R.array.contentNames);
 

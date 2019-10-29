@@ -8,7 +8,7 @@
     tools:context=".Search">
 
     <ImageButton
-        android:id="@+id/searchButton"
+        android:id="@+id/searchButtonYellow"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="15dp"
@@ -20,7 +20,8 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/search_button_image_yellow" />
+        app:srcCompat="@drawable/search_button_image_yellow"
+        android:contentDescription="@string/todo" />
 
 
     <ImageButton
@@ -45,12 +46,28 @@
         android:layout_marginTop="5dp"
         android:hint="@string/hint"
         android:textColor="@color/colorAccent"
-        android:textColorHint="@color/colorAccent"
+        android:textColorHint="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.53"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:importantForAutofill="no" />
+
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_src_text"
+        app:layout_constraintVertical_bias="0.0">
+
+    </ListView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
