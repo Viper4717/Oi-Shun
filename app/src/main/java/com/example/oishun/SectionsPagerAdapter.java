@@ -29,7 +29,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
         switch (position){
             case 0:
-                SubscriptionLayout tab1 = new SubscriptionLayout();
+                ExploreLayout tab1 = new ExploreLayout();
                 return tab1;
             case 1:
                 SubscriptionLayout tab2 = new SubscriptionLayout();
