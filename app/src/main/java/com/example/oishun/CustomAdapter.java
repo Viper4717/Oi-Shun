@@ -1,6 +1,7 @@
 package com.example.oishun;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class CustomAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -58,7 +59,18 @@ public class CustomAdapter extends BaseAdapter {
             contentNameText.setText(contentNames[position]);
             artistName.setText(uploaderNames[position]);
             durationText.setText(durations[position]);
+            //artistName.setOnClickListener(this);
+           /* artistName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context,UserPage.class);
+                    intent.putExtra("user_name", "yamin");
+                    context.startActivity(intent);
+                }
+            });*/
         }
         return convertView;
     }
+
+
 }
