@@ -14,6 +14,7 @@
         android:roundIcon="@mipmap/oi_shun_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Search"></activity>
         <activity android:name=".UserPage" />
         <activity android:name=".SignUpPage" />
         <activity android:name=".SignInPage" />

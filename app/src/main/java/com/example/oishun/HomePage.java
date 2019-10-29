@@ -65,6 +65,13 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             }
         });
 
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+            }
+        });
+
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(HomePage.this,R.layout.activity_content_layout,)
 
         //CustomAdapter adapter = new CustomAdapter(this,contentNames,coverPhotos);

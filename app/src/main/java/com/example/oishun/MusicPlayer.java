@@ -101,7 +101,7 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
         });
 
 
-        //Toast.makeText(this, String.valueOf(totalTime), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, Strin-g.valueOf(totalTime), Toast.LENGTH_SHORT).show();
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
