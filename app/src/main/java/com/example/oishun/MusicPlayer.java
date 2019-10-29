@@ -1,6 +1,7 @@
 package com.example.oishun;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -33,6 +34,9 @@ import java.io.IOException;
 public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPreparedListener{
 
     ImageButton playButton;
+    ImageButton backButton;
+    ImageButton rewindButton;
+    ImageButton volumeButton;
     SeekBar seekBar;
     TextView elapsedTimeLabel;
     TextView remainingTimeLabel;
@@ -43,6 +47,8 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
     String userName;
     TextView recordNameText;
     TextView userNameText;
+    AudioManager audioManager;
+
     int totalTime;
     final int REQUEST_PERMISSION_CODE = 1000;
     @Override
@@ -61,10 +67,14 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
             requestPermissionFromDevice();
 
         playButton = (ImageButton)findViewById(R.id.playButton);
+        backButton = (ImageButton)findViewById(R.id.backButton);
+        volumeButton = (ImageButton)findViewById(R.id.volumeButton);
+        rewindButton = (ImageButton)findViewById(R.id.rewindButton);
         elapsedTimeLabel = (TextView) findViewById(R.id.elapsedTimeLabel);
         remainingTimeLabel = (TextView) findViewById(R.id.remainingTimeLabel);
         recordNameText = (TextView) findViewById(R.id.recordNameText);
         userNameText = (TextView) findViewById(R.id.userNameText);
+        audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         recordNameText.setText(recordingName);
         userNameText.setText(userName);
 
@@ -78,6 +88,17 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
         mp.setLooping(true);
         mp.seekTo(0);
         mp.setVolume(0.5f, 0.5f);
+
+
+
+        //back button
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mp.stop();
+                finish();
+            }
+        });
 
 
         //Toast.makeText(this, String.valueOf(totalTime), Toast.LENGTH_SHORT).show();
@@ -189,6 +210,21 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
                     }
                 }
         );
+
+        rewindButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mp.seekTo(mp.getCurrentPosition() - 11000);
+            }
+        });
+
+        //volume button
+        volumeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
+            }
+        });
 
         new Thread(new Runnable() {
             @Override

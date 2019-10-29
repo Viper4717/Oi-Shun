@@ -119,6 +119,14 @@ public class VoiceRecorder extends AppCompatActivity {
             }
         });
 
+        //back button
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         //Pausebutton action
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
