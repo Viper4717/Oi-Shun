@@ -9,9 +9,13 @@ package com.example.oishun;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.nfc.Tag;
@@ -49,11 +53,16 @@ public class SignUpPage extends AppCompatActivity {
     TextView signInText;
     int RESULT_LOAD_IMAGE;
     ProgressDialog progressDialog;
+    final int REQUEST_PERMISSION_CODE = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_page);
+
+        //Seeking permission from device to write and record
+        if(!checkPermissionFromDevice())
+            requestPermissionFromDevice();
 
        // Toast.makeText(Main2Activity.this,"asfdafs",Toast.LENGTH_LONG);
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -65,6 +74,7 @@ public class SignUpPage extends AppCompatActivity {
         signInText = findViewById(R.id.signInText);
         retypePassword = findViewById(R.id.signUpConfirmPassword);
         userAvatar = findViewById(R.id.userAvatar);
+        userAvatar.setTag("empty");
         avatarChooseButton = findViewById(R.id.avatarChoosebutton);
         progressDialog = new ProgressDialog(this);
         RESULT_LOAD_IMAGE = 1;
@@ -94,14 +104,26 @@ public class SignUpPage extends AppCompatActivity {
 
     }
 
+    //Method to check write and record permission from device
+    private boolean checkPermissionFromDevice() {
+        int readExternalStorageResult = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+        return readExternalStorageResult == PackageManager.PERMISSION_GRANTED;
+    }
+
+    //Method to request write and record permission from device
+    private void requestPermissionFromDevice() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        }, REQUEST_PERMISSION_CODE);
+    }
+
     public void register(){
         String name = username.getText().toString().trim();
         String pass = password.getText().toString().trim();
         String confirmPass = retypePassword.getText().toString().trim();
 
         if(pass.equals(confirmPass)) {
-            progressDialog.setMessage("Registering...");
-            progressDialog.show();
             user = new User();
             user.setName(name);
             user.setPassword(pass);
@@ -109,33 +131,42 @@ public class SignUpPage extends AppCompatActivity {
 
             String avatarPath = userAvatar.getTag().toString();
 
-            final StorageReference filePath = storageReference.child("User Avatars").child(user.getName()).child(user.getName()+".jpg");
+            if(!avatarPath.equals("empty")) {
+                progressDialog.setMessage("Registering...");
+                progressDialog.show();
 
-            Uri uri = Uri.fromFile(new File(avatarPath));
+                final StorageReference filePath = storageReference.child("User Avatars").child(user.getName()).child(user.getName() + ".jpg");
 
-            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    progressDialog.dismiss();
-                    filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            String downloadURL = uri.toString();
-                            user.setUserAvatarURL(downloadURL);
-                            ref.child(user.getName()).setValue(user);
-                        }
-                    });
-                    Toast.makeText(SignUpPage.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                }
-            });
+                Uri uri = Uri.fromFile(new File(avatarPath));
 
-            filePath.putFile(uri).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    progressDialog.dismiss();
-                    Toast.makeText(SignUpPage.this, "Kam Korenai", Toast.LENGTH_SHORT).show();
-                }
-            });
+                filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.dismiss();
+                        filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String downloadURL = uri.toString();
+                                user.setUserAvatarURL(downloadURL);
+                                ref.child(user.getName()).setValue(user);
+                            }
+                        });
+                        Toast.makeText(SignUpPage.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                filePath.putFile(uri).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(SignUpPage.this, "Unsuccessful! Check connection and try again", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+            else{
+                ref.child(user.getName()).setValue(user);
+                Toast.makeText(SignUpPage.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
+            }
         }
 
         else{

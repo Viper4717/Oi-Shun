@@ -1,9 +1,12 @@
 package com.example.oishun;
 
+import java.util.ArrayList;
+
 public class User {
     private String name;
     private String password;
     private String userAvatarURL;
+   // private ArrayList<String> subscribedUserNames;
 
     public User() {
     }
@@ -12,6 +15,7 @@ public class User {
         this.name = name;
         this.password = password;
         this.userAvatarURL = userAvatarURL;
+
     }
 
     public String getName() {
@@ -37,4 +41,5 @@ public class User {
     public void setUserAvatarURL(String userAvatarURL) {
         this.userAvatarURL = userAvatarURL;
     }
+
 }

@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -34,7 +35,9 @@ public class SubscriptionLayout extends Fragment  {
     private int[] coverPhotos = {R.drawable.music_icon_image};
     View view;
     DatabaseReference ref;
+    DatabaseReference friendsRef;
     Recording recording;
+    String[] subNames;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,19 +53,73 @@ public class SubscriptionLayout extends Fragment  {
 
         contents = new ArrayList<>();
         subscribedContentList = (ListView)  view.findViewById(R.id.subscription_contents);
-        ref = FirebaseDatabase.getInstance().getReference().child("recordings");
-        //contentNames = getResources().getStringArray(R.array.contentNames);
-        //System.out.println("hello");
+       // ref = FirebaseDatabase.getInstance().getReference().child("recordings");
+        friendsRef = FirebaseDatabase.getInstance().getReference().child("subscriptions").child("yamin");
 
 
-       /* ref.addValueEventListener(new ValueEventListener() {
+
+        //System.out.println(contents.size());
+        friendsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds: dataSnapshot.getChildren()){
-                    recording = ds.getValue(Recording.class);
-                    contents.add(recording);
-                    System.out.println(contents.size());
-                    System.out.println(recording.getRecordingName());
+                List<String> friends = new ArrayList<>();
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    String subscribedName = ds.getKey();
+                    friends.add(subscribedName);
+                }
+
+                subNames = new String[friends.size()];
+                for(int i = 0 ; i < subNames.length ; i++){
+                    subNames[i] = friends.get(i);
+                }
+
+
+
+                ValueEventListener eventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        //contents.clear();
+                        for(DataSnapshot ds: dataSnapshot.getChildren()){
+                            recording = ds.getValue(Recording.class);
+                            for(int i = 0 ; i < subNames.length; i++){
+                                if(recording.getRecordingUploader().equals(subNames[i])){
+                                    contents.add(recording);
+                                }
+                            }
+
+                        }
+                        String[] names = new String[contents.size()];
+
+                        for(int i = 0 ; i < names.length ; i++){
+                            names[i] = contents.get(i).getRecordingName();
+                        }
+
+                        String[] uploaders = new String[contents.size()];
+
+                        for(int i = 0 ; i < names.length ; i++){
+                            uploaders[i] = contents.get(i).getRecordingUploader();
+                        }
+
+                        String[] durations = new String[contents.size()];
+
+                        for(int i = 0 ; i < names.length ; i++){
+                            durations[i] = contents.get(i).getRecordingDuration();
+                        }
+
+                        CustomAdapter adapter = new CustomAdapter(context,names,coverPhotos,uploaders,durations);
+                        //CustomAdapter adapter = new CustomAdapter(context,contentNames,coverPhotos);
+                        subscribedContentList.setAdapter(adapter);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                };
+                for(int i = 0 ; i < subNames.length ; i++){
+                    Query query =  FirebaseDatabase.getInstance().getReference("recordings").orderByChild("recordingUploader").equalTo(subNames[i]);
+                    query.addListenerForSingleValueEvent(eventListener);
                 }
             }
 
@@ -70,12 +127,11 @@ public class SubscriptionLayout extends Fragment  {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });*/
+        });
 
 
 
-        //System.out.println(contents.size());
-        addListNames();
+       // addListNames();
 
         subscribedContentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,14 +145,11 @@ public class SubscriptionLayout extends Fragment  {
                 startActivity(intent);
             }
         });
-        //contents.clear();
-        //System.out.println(names[0]);
-
 
     }
 
 
-    public void addListNames(){
+  /*  public void addListNames(){
 
         ref.addValueEventListener(new ValueEventListener() {
 
@@ -105,7 +158,12 @@ public class SubscriptionLayout extends Fragment  {
                 contents.clear();
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     recording = ds.getValue(Recording.class);
-                    contents.add(recording);
+                    for(int i = 0 ; i < subNames.length; i++){
+                        if(recording.getRecordingUploader().equals(subNames[i])){
+                            contents.add(recording);
+                        }
+                    }
+
                 }
                 String[] names = new String[contents.size()];
 
@@ -138,9 +196,11 @@ public class SubscriptionLayout extends Fragment  {
             }
         });
 
-        //System.out.println("hello");
 
-    }
+    } */
+
+
+
 
     @Nullable
     @Override
@@ -152,5 +212,3 @@ public class SubscriptionLayout extends Fragment  {
         return view;
     }
 }
-//htt"gs://oishun-73200.appspot.com/Recordings/test/please%20God.mp3"
-//gs://oishun-73200.appspot.com/Recordings/test/please God.mp3

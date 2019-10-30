@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -21,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -43,6 +45,7 @@ public class UserPage extends AppCompatActivity {
     String userName;
     User user;
     FirebaseStorage storage;
+    DatabaseReference ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,24 +53,32 @@ public class UserPage extends AppCompatActivity {
         setContentView(R.layout.activity_user_page);
 
         Intent intent = getIntent();
-        userName = intent.getStringExtra("user_search");
+        userName = intent.getStringExtra("user_name");
 
-       // String ownProfile = intent.getStringExtra("own_profile");
+        String ownProfile = intent.getStringExtra("own_profile");
 
         personalRecordings = new ArrayList<>();
         userImage = (ImageView) findViewById(R.id.userImage);
         userNameText = (TextView) findViewById(R.id.userNameText);
         subscribeButton = (Button) findViewById(R.id.subscribeButton);
         storage = FirebaseStorage.getInstance();
+        ref = FirebaseDatabase.getInstance().getReference("subscriptions");
 
         userNameText.setText(userName);
-       // if(ownProfile.equals("yes")){
-         //   subscribeButton.setEnabled(false);
-        //}
+        if(ownProfile.equals("yes")){
+            subscribeButton.setEnabled(false);
+        }
 
         personalContentNames = getResources().getStringArray(R.array.contentNames);
 
         personalContentView = findViewById(R.id.personal_contents);
+
+        subscribeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ref.child("yamin").child(userName).setValue(true);
+            }
+        });
 
         Query userClassQuery = FirebaseDatabase.getInstance().getReference("user").orderByChild("name").equalTo(userName);
         userClassQuery.addListenerForSingleValueEvent(userImageListener);
@@ -135,5 +146,7 @@ public class UserPage extends AppCompatActivity {
 
         }
     };
+
+
 
 }

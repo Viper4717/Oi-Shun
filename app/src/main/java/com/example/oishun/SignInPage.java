@@ -78,8 +78,9 @@ public class SignInPage extends AppCompatActivity {
 
                     if(logInUser.getName().equals(name) && logInUser.getPassword().equals(password)) {
                         Toast.makeText(SignInPage.this,"Successful",Toast.LENGTH_LONG).show();
+                        OwnProfileValue.userName = name;
                         Intent intent = new Intent(SignInPage.this, HomePage.class);
-                        intent.putExtra("user_name", name);
+                        //intent.putExtra("user_name", name);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         flag = 1;
                         startActivity(intent);

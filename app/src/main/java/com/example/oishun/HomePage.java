@@ -34,8 +34,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-        Intent tempIntent = getIntent();
-        userName = tempIntent.getStringExtra("user_name");
+        //Intent tempIntent = getIntent();
+        //userName = tempIntent.getStringExtra("user_name");
 
         navigationBar = (NavigationView) findViewById(R.id.navigationBar);
         navigationBar.setNavigationItemSelectedListener(this);
@@ -86,7 +86,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         //Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
         if(id == R.id.userProfile){
             Intent intent = new Intent(HomePage.this, UserPage.class);
-            intent.putExtra("user_name", userName);
+            intent.putExtra("user_name", OwnProfileValue.userName);
             intent.putExtra("own_profile", "yes");
             startActivity(intent);
         }
