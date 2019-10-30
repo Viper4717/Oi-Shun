@@ -26,7 +26,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     FloatingActionButton recordActionButton;
     DrawerLayout drawerLayout;
     NavigationView navigationBar;
-    String userName;
     ImageButton menuButton;
     ImageButton searchButton;
 
@@ -60,7 +59,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomePage.this, VoiceRecorder.class);
-                intent.putExtra("user_name", userName);
                 startActivity(intent);
             }
         });

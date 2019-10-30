@@ -77,7 +77,7 @@ public class SignInPage extends AppCompatActivity {
                     logInUser = ds.getValue(User.class);
 
                     if(logInUser.getName().equals(name) && logInUser.getPassword().equals(password)) {
-                        Toast.makeText(SignInPage.this,"Successful",Toast.LENGTH_LONG).show();
+                        //Toast.makeText(SignInPage.this,"Successful",Toast.LENGTH_LONG).show();
                         OwnProfileValue.userName = name;
                         Intent intent = new Intent(SignInPage.this, HomePage.class);
                         //intent.putExtra("user_name", name);

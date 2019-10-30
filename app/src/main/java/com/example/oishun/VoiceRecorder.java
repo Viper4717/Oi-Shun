@@ -63,19 +63,11 @@ public class VoiceRecorder extends AppCompatActivity {
     boolean recording = true;
     boolean paused = true;
     final int REQUEST_PERMISSION_CODE = 1000;
-    StorageReference storageReference;
-    DatabaseReference databaseReference;
-    ProgressDialog progressDialog;
     String outputDir;
     String oldFileName;
-    String newFIleName;
-    String userName;
     long intDuration;
     String recordDuration;
-    Recording recordingDetails;
     long pauseOffset;
-    int RESULT_LOAD_IMAGE;
-    //ImageView coverImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,22 +85,13 @@ public class VoiceRecorder extends AppCompatActivity {
         recordTimer = (Chronometer) findViewById(R.id.recordTimer);
         storageRemaining = (TextView) findViewById(R.id.storageRemaining);
         pausedStatus = (TextView) findViewById(R.id.pausedStatus);
-        storageReference = FirebaseStorage.getInstance().getReference();
-        databaseReference = FirebaseDatabase.getInstance().getReference("recordings");
-        progressDialog = new ProgressDialog(this);
         oldFileName = null;
-        newFIleName = null;
         outputDir = Environment.getExternalStorageDirectory()
                 .getAbsolutePath()+File.separator+"OiShun";
         File file = new File(outputDir);
         if(!file.exists()) file.mkdir();
         double freeBytesExternal = new File(getExternalFilesDir(null).toString()).getFreeSpace();
         storageRemaining.setText(formatSize(freeBytesExternal));
-        Intent tempIntent = getIntent();
-        userName = tempIntent.getStringExtra("user_name");
-        recordingDetails = new Recording();
-        RESULT_LOAD_IMAGE = 1;
-        //coverImage = (ImageView) findViewById(R.id.coverImage);
 
         //Recordbutton action
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -214,138 +197,17 @@ public class VoiceRecorder extends AppCompatActivity {
             //resetting the timer and saving the recording
             intDuration = resetChronometer();
             recordDuration = createTimeLabel(intDuration);
-            saveRecording();
+            Intent intent = new Intent(this, UploadRecording.class);
+            intent.putExtra("oldFileName", oldFileName);
+            intent.putExtra("recordDuration", recordDuration);
+            intent.putExtra("outputDir", outputDir);
+            startActivity(intent);
+            //saveRecording();
 
             //getting the available free space again
             long freeBytesExternal = new File(getExternalFilesDir(null).toString()).getFreeSpace();
             storageRemaining.setText(formatSize(freeBytesExternal));
         }
-    }
-
-    //method to save the recording with custom name
-    private void saveRecording() {
-        LayoutInflater li = LayoutInflater.from(this);
-        View promptsView = li.inflate(R.layout.activity_set_file_name, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-        //set prompts.xml to alertdialog builder
-        alertDialogBuilder.setView(promptsView);
-
-        //Button chooseImageButton = promptsView.findViewById(R.id.chooseImageButton);
-        //final ImageView coverImage = promptsView.findViewById(R.id.coverImage);
-        final EditText userInput = (EditText) promptsView.findViewById(R.id.edit_file_name);
-        userInput.setText(oldFileName);
-        userInput.setSelection(userInput.length());
-        Button upload = (Button) promptsView.findViewById(R.id.upload);
-        Button save = (Button) promptsView.findViewById(R.id.save);
-
-        //set dialog message
-        alertDialogBuilder.setCancelable(false);
-
-        //create alert dialog
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-
-        /*chooseImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent imageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                //startActivityForResult(imageIntent, RESULT_LOAD_IMAGE);
-
-                //Intent imageIntent = new Intent();
-                //imageIntent.setType("image/*");
-                //imageIntent.setAction(Intent.ACTION_GET_CONTENT);
-                //startActivityForResult(Intent.createChooser(imageIntent, "Select Picture"),RESULT_LOAD_IMAGE);
-
-                Intent imageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(imageIntent, RESULT_LOAD_IMAGE);
-            }
-        });*/
-
-
-        upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newFIleName = userInput.getText().toString();
-                if (newFIleName != null && newFIleName.trim().length() > 0) {
-                    File newFile = new File(outputDir, newFIleName+".mp3");
-                    File oldFile = new File(outputDir, oldFileName+".mp3");
-                    oldFile.renameTo(newFile);
-                    uploadAudio();
-                    oldFileName = null;
-                    alertDialog.dismiss();
-                }
-            }
-        });
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newFIleName = userInput.getText().toString();
-                if (newFIleName != null && newFIleName.trim().length() > 0) {
-                    File newFile = new File(outputDir, newFIleName+".mp3");
-                    File oldFile = new File(outputDir, oldFileName+".mp3");
-                    oldFile.renameTo(newFile);
-                    oldFileName = null;
-                    alertDialog.dismiss();
-                    Toast.makeText(VoiceRecorder.this, "Saved", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        //showing it
-        alertDialog.show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null){
-            //Toast.makeText(this, "ei function e dhukse", Toast.LENGTH_LONG).show();
-            LayoutInflater li = LayoutInflater.from(this);
-            View promptsView = li.inflate(R.layout.activity_set_file_name, null);
-            //ImageView coverImage = promptsView.findViewById(R.id.coverImage);
-            //Uri selectedImage = data.getData();
-            //coverImage.setImageURI(selectedImage);
-
-            /*Uri filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), filePath);
-                //Bitmap bitmap = BitmapFactory.decodeFile(filePath.toString());
-                coverImage.setImageBitmap(bitmap);
-            } catch (Exception e){
-                e.printStackTrace();
-            }*/
-        }
-    }
-
-    //method to upload audio files to Firebase
-    private void uploadAudio() {
-        progressDialog.setMessage("Uploading ...");
-        progressDialog.show();
-        final StorageReference filePath = storageReference.child("Recordings").child(userName).child(newFIleName+".mp3");
-
-        Uri uri = Uri.fromFile(new File(outputDir, newFIleName+".mp3"));
-
-        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                progressDialog.dismiss();
-                filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        String downloadURL = uri.toString();
-                        //recordingDetails.setRecordingURL(taskSnapshot.getStorage().getDownloadUrl().toString());
-                        recordingDetails.setRecordingURL(downloadURL);
-                        recordingDetails.setRecordingName(newFIleName);
-                        recordingDetails.setRecordingUploader(userName);
-                        recordingDetails.setRecordingDuration(recordDuration);
-                        String uploadID = databaseReference.push().getKey();
-                        databaseReference.child(uploadID).setValue(recordingDetails);
-                    }
-                });
-                Toast.makeText(VoiceRecorder.this, "Upload Successful!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
     //Method for pausing
