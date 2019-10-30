@@ -76,7 +76,7 @@ public class UserPage extends AppCompatActivity {
         subscribeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ref.child("yamin").child(userName).setValue(true);
+                ref.child(OwnProfileValue.userName).child(userName).setValue(true);
             }
         });
 
