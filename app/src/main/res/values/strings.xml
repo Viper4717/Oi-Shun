@@ -11,6 +11,8 @@
     <string name="play">play</string>
     <string name="volume">volume</string>
     <string name="rewind">rewind</string>
+    <string name="subscribe">SUBSCRIBE</string>
+    <string name="unsubscribe">UNSUBSCRIBE</string>
     <string-array name="contentNames">
         <item>Content Name</item>
         <item>Content Name</item>

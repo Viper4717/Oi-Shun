@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,6 +47,7 @@ public class UserPage extends AppCompatActivity {
     User user;
     FirebaseStorage storage;
     DatabaseReference ref;
+    boolean subscribeFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +67,14 @@ public class UserPage extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference("subscriptions");
 
         userNameText.setText(userName);
+
+        //enabling or disabling the subscribe button
+        //TODO change this to OwnProfileValue.username;
         if(ownProfile.equals("yes")){
             subscribeButton.setEnabled(false);
         }
+
+        ref.child(OwnProfileValue.userName).orderByChild(userName).equalTo("true").addListenerForSingleValueEvent(isSubscribedListener);
 
         personalContentNames = getResources().getStringArray(R.array.contentNames);
 
@@ -76,7 +83,11 @@ public class UserPage extends AppCompatActivity {
         subscribeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ref.child("yamin").child(userName).setValue(true);
+                if(!subscribeFlag){
+                    ref.child(OwnProfileValue.userName).child(userName).setValue(true);
+                    subscribeButton.setText(R.string.unsubscribe);
+                    subscribeFlag = true;
+                }
             }
         });
 
@@ -147,6 +158,23 @@ public class UserPage extends AppCompatActivity {
         }
     };
 
+    ValueEventListener isSubscribedListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                Toast.makeText(UserPage.this, "eikhane ashse", Toast.LENGTH_SHORT).show();
+                subscribeButton.setText(R.string.unsubscribe);
+                subscribeFlag = true;
+            }
+            else {
+                subscribeButton.setText(R.string.subscribe);
+                subscribeFlag = false;
+            }
+        }
 
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
 
+        }
+    };
 }
