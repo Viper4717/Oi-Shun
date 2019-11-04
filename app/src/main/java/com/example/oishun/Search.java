@@ -66,11 +66,11 @@ public class Search extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String str = names[position];
-                Toast.makeText(Search.this, str, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Search.this, str, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Search.this,UserPage.class);
                 intent.putExtra("user_name", str);
-                if(str.equals(OwnProfileValue.userName)) intent.putExtra("own_profile", "yes");
-                else intent.putExtra("own_profile", "no");
+                //if(str.equals(OwnProfileValue.userName)) intent.putExtra("own_profile", "yes");
+                //else intent.putExtra("own_profile", "no");
                 //intent.putExtra("recordingDuration",rec.getRecordingDuration());
                 startActivity(intent);
             }
