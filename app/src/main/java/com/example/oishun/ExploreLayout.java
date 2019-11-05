@@ -27,7 +27,8 @@ public class ExploreLayout extends Fragment {
     private ListView subscribedContentList;
     List<Recording> contents;
     //String[] names;
-    private int[] coverPhotos = {R.drawable.music_icon_image};
+    //private int[] coverPhotos = {R.drawable.music_icon_image};
+
     View view;
     DatabaseReference ref;
     Recording recording;
@@ -118,6 +119,12 @@ public class ExploreLayout extends Fragment {
 
                 for (int i = 0; i < names.length; i++) {
                     durations[i] = contents.get(i).getRecordingDuration();
+                }
+
+                String[] coverPhotos = new String[contents.size()];
+
+                for(int i = 0 ; i < names.length ; i++){
+                    coverPhotos[i] = contents.get(i).getRecordingImageURL();
                 }
 
                 CustomAdapter adapter = new CustomAdapter(context, names, coverPhotos, uploaders, durations);

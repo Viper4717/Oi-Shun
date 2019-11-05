@@ -19,7 +19,6 @@
             android:layout_width="85dp"
             android:layout_height="match_parent"
             android:paddingTop="5dp"
-
             android:src="@drawable/music_icon_image" />
 
         <LinearLayout
