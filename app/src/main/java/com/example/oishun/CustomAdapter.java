@@ -10,20 +10,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class CustomAdapter extends BaseAdapter {
     private int[] coverPhotos;
+    private String[] photos;
     private String[] contentNames;
     private Context context;
     private LayoutInflater inflater;
     private String[] uploaderNames;
     private String[] durations;
 
-    public CustomAdapter(Context context, String[] contentNames, int[] coverPhotos, String[] uploaderNames,String[] durations) {
+    public CustomAdapter(Context context, String[] contentNames, String[] coverPhotos, String[] uploaderNames,String[] durations) {
         this.context = context;
         this.contentNames = contentNames;
-        this.coverPhotos = coverPhotos;
+        this.photos = coverPhotos;
         this.uploaderNames = uploaderNames;
         this.durations = durations;
     }
@@ -55,7 +58,8 @@ public class CustomAdapter extends BaseAdapter {
             TextView artistName = convertView.findViewById(R.id.artist_name);
             TextView durationText = convertView.findViewById(R.id.duration);
           //  String name = contentNames[position];
-            coverPhotoImage.setImageResource(coverPhotos[position % 1]);
+           // coverPhotoImage.setImageResource(coverPhotos[position % 1]);
+            Glide.with(context).load(photos[position]).into(coverPhotoImage);
             contentNameText.setText(contentNames[position]);
             artistName.setText(uploaderNames[position]);
             durationText.setText(durations[position]);

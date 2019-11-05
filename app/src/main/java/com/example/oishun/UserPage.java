@@ -39,7 +39,7 @@ public class UserPage extends AppCompatActivity {
 
     ListView personalContentView;
     String[] personalContentNames;
-    private int[] coverPhotos = {R.drawable.music_icon_image};
+    String[] coverPhotos;
     List<Recording> personalRecordings;
     ImageView userImage;
     ImageButton backButton;
@@ -132,6 +132,7 @@ public class UserPage extends AppCompatActivity {
                 intent.putExtra("recordingURL", rec.getRecordingURL());
                 intent.putExtra("recordingName",rec.getRecordingName());
                 intent.putExtra("recordingUploader",rec.getRecordingUploader());
+                intent.putExtra("recordingImageURL",rec.getRecordingImageURL());
                 //intent.putExtra("recordingDuration",rec.getRecordingDuration());
                 startActivity(intent);
             }
@@ -165,6 +166,12 @@ public class UserPage extends AppCompatActivity {
 
                 for(int i = 0 ; i < names.length ; i++){
                     durations[i] = personalRecordings.get(i).getRecordingDuration();
+                }
+
+                String[] coverPhotos = new String[personalRecordings.size()];
+
+                for(int i = 0 ; i < names.length ; i++){
+                    coverPhotos[i] = personalRecordings.get(i).getRecordingImageURL();
                 }
 
                 UserAdapter userAdapter = new UserAdapter(UserPage.this, names, coverPhotos,myName,durations);

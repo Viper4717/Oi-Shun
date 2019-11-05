@@ -8,9 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 public class UserAdapter extends BaseAdapter {
 
-    private int[] coverPhotos;
+    String[] coverPhotos;
     private String[] contentList;
     Context context;
     private LayoutInflater inflater;
@@ -18,7 +20,7 @@ public class UserAdapter extends BaseAdapter {
     private String[] durations;
 
 
-    UserAdapter(Context context, String[] contentList, int[] coverPhotos, String[] uploaderNames,String[] durations){
+    UserAdapter(Context context, String[] contentList, String[] coverPhotos, String[] uploaderNames,String[] durations){
         this.contentList = contentList;
         this.context = context;
         this.coverPhotos = coverPhotos;
@@ -53,7 +55,7 @@ public class UserAdapter extends BaseAdapter {
         TextView artistName = view.findViewById(R.id.artist_name);
         TextView durationText = view.findViewById(R.id.duration);
 
-        coverPhotoImage.setImageResource(coverPhotos[position % 1]);
+        Glide.with(context).load(coverPhotos[position]).into(coverPhotoImage);
         contentNameText.setText(contentList[position]);
         artistName.setText(uploaderNames[position%1]);
         durationText.setText(durations[position]);
