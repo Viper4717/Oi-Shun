@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ public class UserPage extends AppCompatActivity {
     private int[] coverPhotos = {R.drawable.music_icon_image};
     List<Recording> personalRecordings;
     ImageView userImage;
+    ImageButton backButton;
     TextView userNameText;
     Button subscribeButton;
     Recording recording;
@@ -65,6 +67,7 @@ public class UserPage extends AppCompatActivity {
         personalRecordings = new ArrayList<>();
         userImage = (ImageView) findViewById(R.id.userImage);
         userNameText = (TextView) findViewById(R.id.userNameText);
+        backButton = findViewById(R.id.backButton);
         subscribeButton = (Button) findViewById(R.id.subscribeButton);
         storage = FirebaseStorage.getInstance();
         ref = FirebaseDatabase.getInstance().getReference("subscriptions");
@@ -84,6 +87,13 @@ public class UserPage extends AppCompatActivity {
         personalContentNames = getResources().getStringArray(R.array.contentNames);
 
         personalContentView = findViewById(R.id.personal_contents);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         subscribeButton.setOnClickListener(new View.OnClickListener() {
             @Override
