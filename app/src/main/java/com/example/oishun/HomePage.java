@@ -85,7 +85,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         if(id == R.id.userProfile){
             Intent intent = new Intent(HomePage.this, UserPage.class);
             intent.putExtra("user_name", OwnProfileValue.userName);
-            intent.putExtra("own_profile", "yes");
+            //intent.putExtra("own_profile", "yes");
             startActivity(intent);
         }
         else if(id == R.id.signOut){

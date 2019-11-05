@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,6 +47,7 @@ public class UserPage extends AppCompatActivity {
     User user;
     FirebaseStorage storage;
     DatabaseReference ref;
+    boolean subscribeFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,7 @@ public class UserPage extends AppCompatActivity {
         Intent intent = getIntent();
         userName = intent.getStringExtra("user_name");
 
-        String ownProfile = intent.getStringExtra("own_profile");
+        //String ownProfile = intent.getStringExtra("own_profile");
 
         personalRecordings = new ArrayList<>();
         userImage = (ImageView) findViewById(R.id.userImage);
@@ -65,9 +67,16 @@ public class UserPage extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference("subscriptions");
 
         userNameText.setText(userName);
-        if(ownProfile.equals("yes")){
+
+        //enabling or disabling the subscribe button
+        if(userName.equals(OwnProfileValue.userName)){
             subscribeButton.setEnabled(false);
         }
+
+        ref.child(OwnProfileValue.userName).child(userName).addListenerForSingleValueEvent(isSubscribedListener);
+
+        //Query isSubscribedQuery = ref.orderByChild(userName).equalTo(true);
+        //isSubscribedQuery.addListenerForSingleValueEvent(isSubscribedListener);
 
         personalContentNames = getResources().getStringArray(R.array.contentNames);
 
@@ -76,12 +85,25 @@ public class UserPage extends AppCompatActivity {
         subscribeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ref.child(OwnProfileValue.userName).child(userName).setValue(true);
+                if(!subscribeFlag){
+                    ref.child(OwnProfileValue.userName).child(userName).setValue(true);
+                    subscribeButton.setText(R.string.unsubscribe);
+                    subscribeFlag = true;
+                    Toast.makeText(UserPage.this, "Subscribed!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    ref.child(OwnProfileValue.userName).child(userName).setValue(false);
+                    subscribeButton.setText(R.string.subscribe);
+                    subscribeFlag = false;
+                    Toast.makeText(UserPage.this, "Unsubscribed", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        Query userClassQuery = FirebaseDatabase.getInstance().getReference("user").orderByChild("name").equalTo(userName);
-        userClassQuery.addListenerForSingleValueEvent(userImageListener);
+        //Query userClassQuery = FirebaseDatabase.getInstance().getReference("user").orderByChild("name").equalTo(userName);
+        //userClassQuery.addListenerForSingleValueEvent(userImageListener);
+
+        FirebaseDatabase.getInstance().getReference("user").child(userName).addListenerForSingleValueEvent(userImageListener);
 
         Query query = FirebaseDatabase.getInstance().getReference("recordings").orderByChild("recordingUploader").equalTo(userName);
         query.addListenerForSingleValueEvent(valueEventListener);
@@ -135,9 +157,7 @@ public class UserPage extends AppCompatActivity {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             if (dataSnapshot.exists()) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    user = ds.getValue(User.class);
-                }
+                user = dataSnapshot.getValue(User.class);
                 Glide.with(getApplicationContext()).load(user.getUserAvatarURL()).into(userImage);
             }
         }
@@ -147,6 +167,30 @@ public class UserPage extends AppCompatActivity {
         }
     };
 
+    ValueEventListener isSubscribedListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                boolean sub = dataSnapshot.getValue(Boolean.class);
+                if(sub) {
+                    //Toast.makeText(UserPage.this, "eikhane ashse", Toast.LENGTH_SHORT).show();
+                    subscribeButton.setText(R.string.unsubscribe);
+                    subscribeFlag = true;
+                }
+                else{
+                    subscribeButton.setText(R.string.subscribe);
+                    subscribeFlag = false;
+                }
+            }
+            else {
+                subscribeButton.setText(R.string.subscribe);
+                subscribeFlag = false;
+            }
+        }
 
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
 
+        }
+    };
 }
