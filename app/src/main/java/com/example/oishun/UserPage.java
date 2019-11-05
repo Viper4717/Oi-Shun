@@ -89,6 +89,13 @@ public class UserPage extends AppCompatActivity {
                     ref.child(OwnProfileValue.userName).child(userName).setValue(true);
                     subscribeButton.setText(R.string.unsubscribe);
                     subscribeFlag = true;
+                    Toast.makeText(UserPage.this, "Subscribed!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    ref.child(OwnProfileValue.userName).child(userName).setValue(false);
+                    subscribeButton.setText(R.string.subscribe);
+                    subscribeFlag = false;
+                    Toast.makeText(UserPage.this, "Unsubscribed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
