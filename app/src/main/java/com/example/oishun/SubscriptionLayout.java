@@ -39,6 +39,7 @@ public class SubscriptionLayout extends Fragment  {
     DatabaseReference friendsRef;
     Recording recording;
     String[] subNames;
+    ValueEventListener eventListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class SubscriptionLayout extends Fragment  {
         contents = new ArrayList<>();
         subscribedContentList = (ListView)  view.findViewById(R.id.subscription_contents);
        // ref = FirebaseDatabase.getInstance().getReference().child("recordings");
-        friendsRef = FirebaseDatabase.getInstance().getReference().child("subscriptions").child(OwnProfileValue.userName);
+        friendsRef = FirebaseDatabase.getInstance().getReference("subscriptions").child(OwnProfileValue.userName);
 
 
 
@@ -63,22 +64,33 @@ public class SubscriptionLayout extends Fragment  {
         friendsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                contents.clear();
                 List<String> friends = new ArrayList<>();
+                int c = 0;
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    String subscribedName = ds.getKey();
-                    friends.add(subscribedName);
+                    //Toast.makeText(context, ds.getValue(Boolean.class).toString(), Toast.LENGTH_SHORT).show();
+
+                    if(ds.getValue(Boolean.class) == true){
+                        String subscribedName = ds.getKey();
+                        friends.add(subscribedName);
+                        c++;
+                    }
+
+
                 }
 
+
                 subNames = new String[friends.size()];
+
+
                 for(int i = 0 ; i < subNames.length ; i++){
                     subNames[i] = friends.get(i);
                 }
 
-
-
-                ValueEventListener eventListener = new ValueEventListener() {
+                eventListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                         //contents.clear();
                         for(DataSnapshot ds: dataSnapshot.getChildren()){
                             recording = ds.getValue(Recording.class);
@@ -89,27 +101,16 @@ public class SubscriptionLayout extends Fragment  {
                             }
 
                         }
+
                         String[] names = new String[contents.size()];
-
-                        for(int i = 0 ; i < names.length ; i++){
-                            names[i] = contents.get(i).getRecordingName();
-                        }
-
+                        String[] coverPhotos = new String[contents.size()];
                         String[] uploaders = new String[contents.size()];
-
-                        for(int i = 0 ; i < names.length ; i++){
-                            uploaders[i] = contents.get(i).getRecordingUploader();
-                        }
-
                         String[] durations = new String[contents.size()];
 
                         for(int i = 0 ; i < names.length ; i++){
+                            names[i] = contents.get(i).getRecordingName();
+                            uploaders[i] = contents.get(i).getRecordingUploader();
                             durations[i] = contents.get(i).getRecordingDuration();
-                        }
-
-                        String[] coverPhotos = new String[contents.size()];
-
-                        for(int i = 0 ; i < names.length ; i++){
                             coverPhotos[i] = contents.get(i).getRecordingImageURL();
                         }
 
@@ -125,10 +126,16 @@ public class SubscriptionLayout extends Fragment  {
 
                     }
                 };
+
+
                 for(int i = 0 ; i < subNames.length ; i++){
+
                     Query query =  FirebaseDatabase.getInstance().getReference("recordings").orderByChild("recordingUploader").equalTo(subNames[i]);
                     query.addListenerForSingleValueEvent(eventListener);
                 }
+                //for(int i = 0 ; i < subNames.length ; i++){
+                 //   subNames[i] = null;
+                //}
             }
 
             @Override
@@ -136,6 +143,7 @@ public class SubscriptionLayout extends Fragment  {
 
             }
         });
+
 
 
 
@@ -149,7 +157,7 @@ public class SubscriptionLayout extends Fragment  {
                 intent.putExtra("recordingURL", rec.getRecordingURL());
                 intent.putExtra("recordingName",rec.getRecordingName());
                 intent.putExtra("recordingUploader",rec.getRecordingUploader());
-                //intent.putExtra("recordingDuration",rec.getRecordingDuration());
+                intent.putExtra("recordingImageURL",rec.getRecordingImageURL());
                 startActivity(intent);
             }
         });
