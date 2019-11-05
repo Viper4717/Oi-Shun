@@ -79,6 +79,7 @@ public class ExploreLayout extends Fragment {
                 Intent intent = new Intent(context, MusicPlayer.class);
                 intent.putExtra("recordingURL", rec.getRecordingURL());
                 intent.putExtra("recordingName", rec.getRecordingName());
+                intent.putExtra("recordingImageURL",rec.getRecordingImageURL());
                 intent.putExtra("recordingUploader", rec.getRecordingUploader());
                 //intent.putExtra("recordingDuration",rec.getRecordingDuration());
                 startActivity(intent);

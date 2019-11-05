@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -48,6 +50,7 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
     TextView recordNameText;
     TextView userNameText;
     AudioManager audioManager;
+    ImageView recordingImage;
 
     int totalTime;
     final int REQUEST_PERMISSION_CODE = 1000;
@@ -62,6 +65,7 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
         //Toast.makeText(this, playingURL, Toast.LENGTH_SHORT).show();
         recordingName = intent.getStringExtra("recordingName");
         userName = intent.getStringExtra("recordingUploader");
+        imageURL = intent.getStringExtra("recordingImageURL");
 
         if(!checkPermissionFromDevice())
             requestPermissionFromDevice();
@@ -77,6 +81,9 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
         audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         recordNameText.setText(recordingName);
         userNameText.setText(userName);
+        recordingImage = (ImageView) findViewById(R.id.imageView);
+        Glide.with(getApplicationContext()).load(imageURL).into(recordingImage);
+
 
         // Media Player
         //mp = MediaPlayer.create(this,R.raw.music);
