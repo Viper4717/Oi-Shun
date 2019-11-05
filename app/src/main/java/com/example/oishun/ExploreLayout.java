@@ -101,32 +101,38 @@ public class ExploreLayout extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 contents.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    recording = ds.getValue(Recording.class);
-                    contents.add(recording);
+                    //recording = ds.getValue(Recording.class);
+                    contents.add(ds.getValue(Recording.class));
                 }
                 String[] names = new String[contents.size()];
+                String[] uploaders = new String[contents.size()];
+                String[] durations = new String[contents.size()];
+                String[] coverPhotos = new String[contents.size()];
 
                 for (int i = 0; i < names.length; i++) {
                     names[i] = contents.get(i).getRecordingName();
+                    uploaders[i] = contents.get(i).getRecordingUploader();
+                    durations[i] = contents.get(i).getRecordingDuration();
+                    coverPhotos[i] = contents.get(i).getRecordingImageURL();
                 }
 
-                String[] uploaders = new String[contents.size()];
 
-                for (int i = 0; i < names.length; i++) {
+
+              /*  for (int i = 0; i < names.length; i++) {
                     uploaders[i] = contents.get(i).getRecordingUploader();
                 }
 
-                String[] durations = new String[contents.size()];
+
 
                 for (int i = 0; i < names.length; i++) {
                     durations[i] = contents.get(i).getRecordingDuration();
                 }
 
-                String[] coverPhotos = new String[contents.size()];
+
 
                 for(int i = 0 ; i < names.length ; i++){
                     coverPhotos[i] = contents.get(i).getRecordingImageURL();
-                }
+                }*/
 
                 CustomAdapter adapter = new CustomAdapter(context, names, coverPhotos, uploaders, durations);
                 //CustomAdapter adapter = new CustomAdapter(context,contentNames,coverPhotos);

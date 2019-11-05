@@ -55,7 +55,7 @@ public class SubscriptionLayout extends Fragment  {
         contents = new ArrayList<>();
         subscribedContentList = (ListView)  view.findViewById(R.id.subscription_contents);
        // ref = FirebaseDatabase.getInstance().getReference().child("recordings");
-        friendsRef = FirebaseDatabase.getInstance().getReference().child("subscriptions").child("yamin");
+        friendsRef = FirebaseDatabase.getInstance().getReference().child("subscriptions").child(OwnProfileValue.userName);
 
 
 
