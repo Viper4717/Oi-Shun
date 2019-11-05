@@ -14,11 +14,16 @@ public class UserAdapter extends BaseAdapter {
     private String[] contentList;
     Context context;
     private LayoutInflater inflater;
+    private String[] uploaderNames;
+    private String[] durations;
 
-    UserAdapter(Context context, String[] contentList, int[] coverPhotos){
+
+    UserAdapter(Context context, String[] contentList, int[] coverPhotos, String[] uploaderNames,String[] durations){
         this.contentList = contentList;
         this.context = context;
         this.coverPhotos = coverPhotos;
+        this.uploaderNames = uploaderNames;
+        this.durations = durations;
     }
 
     @Override
@@ -45,9 +50,13 @@ public class UserAdapter extends BaseAdapter {
         }
         ImageView coverPhotoImage = view.findViewById(R.id.audio_cover_photo);
         TextView contentNameText = view.findViewById(R.id.content_name_text);
+        TextView artistName = view.findViewById(R.id.artist_name);
+        TextView durationText = view.findViewById(R.id.duration);
 
         coverPhotoImage.setImageResource(coverPhotos[position % 1]);
         contentNameText.setText(contentList[position]);
+        artistName.setText(uploaderNames[position%1]);
+        durationText.setText(durations[position]);
 
         return view;
     }

@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -48,6 +49,7 @@ public class UserPage extends AppCompatActivity {
     FirebaseStorage storage;
     DatabaseReference ref;
     boolean subscribeFlag;
+    String[] myName = new String[1];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class UserPage extends AppCompatActivity {
 
         Intent intent = getIntent();
         userName = intent.getStringExtra("user_name");
+        myName[0] = userName;
 
         //String ownProfile = intent.getStringExtra("own_profile");
 
@@ -111,6 +114,19 @@ public class UserPage extends AppCompatActivity {
         // UserAdapter userAdapter = new UserAdapter(this,personalContentNames,coverPhotos);
         //  personalContentView.setAdapter(userAdapter);
 
+        personalContentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Recording rec = personalRecordings.get(position);
+                Intent intent = new Intent(UserPage.this,MusicPlayer.class);
+                intent.putExtra("recordingURL", rec.getRecordingURL());
+                intent.putExtra("recordingName",rec.getRecordingName());
+                intent.putExtra("recordingUploader",rec.getRecordingUploader());
+                //intent.putExtra("recordingDuration",rec.getRecordingDuration());
+                startActivity(intent);
+            }
+        });
+
     }
 
     ValueEventListener valueEventListener = new ValueEventListener() {
@@ -134,14 +150,14 @@ public class UserPage extends AppCompatActivity {
                 for(int i = 0 ; i < names.length ; i++){
                     uploaders[i] = personalRecordings.get(i).getRecordingUploader();
                 }
-
+*/
                 String[] durations = new String[personalRecordings.size()];
 
                 for(int i = 0 ; i < names.length ; i++){
                     durations[i] = personalRecordings.get(i).getRecordingDuration();
                 }
-*/
-                UserAdapter userAdapter = new UserAdapter(UserPage.this, names, coverPhotos);
+
+                UserAdapter userAdapter = new UserAdapter(UserPage.this, names, coverPhotos,myName,durations);
                 personalContentView.setAdapter(userAdapter);
 
             }
