@@ -70,7 +70,7 @@ public class UserPage extends AppCompatActivity {
 
         //enabling or disabling the subscribe button
         if(userName.equals(OwnProfileValue.userName)){
-            subscribeButton.setEnabled(false);
+            subscribeButton.setVisibility(View.GONE);
         }
 
         ref.child(OwnProfileValue.userName).child(userName).addListenerForSingleValueEvent(isSubscribedListener);

@@ -63,12 +63,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="40dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userImage">
+        app:layout_constraintTop_toBottomOf="@+id/uploadText">
 
         <ListView
             android:id="@+id/personal_contents"
@@ -79,6 +78,24 @@
             />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/uploadText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorAccent"
+        android:fontFamily="@font/archivo_regular"
+        android:paddingStart="20dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="3dp"
+        android:text="Uploads"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userImage" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
