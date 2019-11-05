@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -133,6 +134,17 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
         // Seek Bar
         seekBar = (SeekBar) findViewById(R.id.seekBar);
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            mp.stop();
+            finish();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     private boolean checkPermissionFromDevice() {
