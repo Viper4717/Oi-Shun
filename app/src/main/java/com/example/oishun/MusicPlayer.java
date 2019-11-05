@@ -104,7 +104,19 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
             @Override
             public void onClick(View view) {
                 mp.stop();
+                //mp.release();
                 finish();
+            }
+        });
+
+        userNameText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mp.pause();
+                playButton.setImageResource(R.drawable.play);
+                Intent intent = new Intent(MusicPlayer.this, UserPage.class);
+                intent.putExtra("user_name",userName);
+                startActivity(intent);
             }
         });
 
@@ -140,10 +152,10 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
             mp.stop();
+            //mp.release();
             finish();
             return true;
         }
-
         return super.onKeyDown(keyCode, event);
     }
 
