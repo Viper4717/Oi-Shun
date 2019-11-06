@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +29,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     NavigationView navigationBar;
     ImageButton menuButton;
     ImageButton searchButton;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         drawerLayout = findViewById(R.id.DrawerLayout);
         menuButton = (ImageButton) findViewById(R.id.menuButton);
         searchButton = (ImageButton) findViewById(R.id.searchButton);
+        firebaseAuth = FirebaseAuth.getInstance();
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -89,7 +92,9 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             startActivity(intent);
         }
         else if(id == R.id.signOut){
-            finish();
+            firebaseAuth.signOut();
+            Intent intent = new Intent(this, SignInPage.class);
+            startActivity(intent);
         }
         //close navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);

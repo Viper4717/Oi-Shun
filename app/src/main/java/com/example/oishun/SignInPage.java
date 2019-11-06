@@ -11,6 +11,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +30,8 @@ public class SignInPage extends AppCompatActivity {
     Button signInButton;
     TextView signUpText;
     DatabaseReference ref;
+    FirebaseAuth firebaseAuth;
+    FirebaseAuth.AuthStateListener firebaseAuthListener;
 
 
     @Override
@@ -40,6 +47,20 @@ public class SignInPage extends AppCompatActivity {
         signUpText = findViewById(R.id.signUpText);
 
         ref = FirebaseDatabase.getInstance().getReference().child("user");
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        /*firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                if(firebaseUser != null){
+                    Toast.makeText(SignInPage.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(SignInPage.this, "Please login", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };*/
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,9 +87,6 @@ public class SignInPage extends AppCompatActivity {
         final String name = usernameText.getText().toString();
         password = passwordText.getText().toString();
 
-        // logInUser = new User(name,password);
-
-
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -76,23 +94,27 @@ public class SignInPage extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     logInUser = ds.getValue(User.class);
 
-                    if(logInUser.getName().equals(name) && logInUser.getPassword().equals(password)) {
+                    if(logInUser.getName().equals(name)) {
                         //Toast.makeText(SignInPage.this,"Successful",Toast.LENGTH_LONG).show();
-                        OwnProfileValue.userName = name;
-                        Intent intent = new Intent(SignInPage.this, HomePage.class);
-                        //intent.putExtra("user_name", name);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        flag = 1;
-                        startActivity(intent);
-                        break;
+                        firebaseAuth.signInWithEmailAndPassword(logInUser.getEmail(), password)
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(!task.isSuccessful()){
+                                    Toast.makeText(SignInPage.this, "Unsuccessful", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    OwnProfileValue.userName = name;
+                                    Intent intent = new Intent(SignInPage.this, HomePage.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    flag = 1;
+                                    startActivity(intent);
+                                }
+                            }
+                        });
                     }
+                    if(flag == 1) break;
                 }
-                if(flag == 0) {
-                    Toast.makeText(SignInPage.this,"Unsuccessful",Toast.LENGTH_LONG).show();
-                }
-
-
-
             }
 
             @Override
@@ -101,4 +123,10 @@ public class SignInPage extends AppCompatActivity {
             }
         });
     }
+
+    /*@Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(firebaseAuthListener);
+    }*/
 }
