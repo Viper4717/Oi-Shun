@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class User {
     private String name;
+    private String email;
     private String password;
     private String userAvatarURL;
    // private ArrayList<String> subscribedUserNames;
@@ -11,9 +12,9 @@ public class User {
     public User() {
     }
 
-    public User(String name, String password, String userAvatarURL) {
+    public User(String name, String email, String userAvatarURL) {
         this.name = name;
-        this.password = password;
+        this.email = email;
         this.userAvatarURL = userAvatarURL;
 
     }
@@ -26,12 +27,12 @@ public class User {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUserAvatarURL() {
@@ -42,4 +43,11 @@ public class User {
         this.userAvatarURL = userAvatarURL;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
