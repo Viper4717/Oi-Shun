@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class User {
     private String name;
     private String email;
-    private String password;
     private String userAvatarURL;
    // private ArrayList<String> subscribedUserNames;
 
@@ -41,13 +40,5 @@ public class User {
 
     public void setUserAvatarURL(String userAvatarURL) {
         this.userAvatarURL = userAvatarURL;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
