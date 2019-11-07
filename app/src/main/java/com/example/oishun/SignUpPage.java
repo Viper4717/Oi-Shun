@@ -200,8 +200,18 @@ public class SignUpPage extends AppCompatActivity {
                 });
             }
             else{
-                ref.child(user.getName()).setValue(user);
-                Toast.makeText(SignUpPage.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                progressDialog.setMessage("Registering...");
+                progressDialog.show();
+                firebaseAuth.createUserWithEmailAndPassword(email, pass)
+                        .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(AuthResult authResult) {
+                                ref.child(user.getName()).setValue(user);
+                                progressDialog.dismiss();
+                                Toast.makeText(SignUpPage.this, "Registered Successfully!"
+                                        , Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         }
 
