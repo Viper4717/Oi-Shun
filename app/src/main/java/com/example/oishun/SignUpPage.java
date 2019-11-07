@@ -142,6 +142,10 @@ public class SignUpPage extends AppCompatActivity {
             password.setError("Please enter a password");
             password.requestFocus();
         }
+        else if(pass.length()<8){
+            password.setError("Password must have minimum 8 characters");
+            password.requestFocus();
+        }
         else if(confirmPass.isEmpty()){
             retypePassword.setError("Please re-type the password");
             retypePassword.requestFocus();
