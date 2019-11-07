@@ -93,8 +93,9 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         }
         else if(id == R.id.signOut){
             firebaseAuth.signOut();
-            Intent intent = new Intent(this, SignInPage.class);
+            Intent intent = new Intent(HomePage.this, SignInPage.class);
             startActivity(intent);
+            finish();
         }
         //close navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);

@@ -106,9 +106,10 @@ public class SignInPage extends AppCompatActivity {
                                 else{
                                     OwnProfileValue.userName = name;
                                     Intent intent = new Intent(SignInPage.this, HomePage.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     flag = 1;
                                     startActivity(intent);
+                                    finish();
                                 }
                             }
                         });

@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
                     query.addListenerForSingleValueEvent(eventListener);
                 }
                 else{
-                    Toast.makeText(MainActivity.this, "Please login", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MainActivity.this, SignInPage.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         };
@@ -67,8 +67,10 @@ public class MainActivity extends AppCompatActivity {
                     user = ds.getValue(User.class);
                     OwnProfileValue.userName = user.getName();
                 }
+                Toast.makeText(MainActivity.this, "Signed in as "+OwnProfileValue.userName, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, HomePage.class);
                 startActivity(intent);
+                finish();
             }
         }
 
