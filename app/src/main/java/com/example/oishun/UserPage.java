@@ -191,7 +191,9 @@ public class UserPage extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             if (dataSnapshot.exists()) {
                 user = dataSnapshot.getValue(User.class);
-                Glide.with(getApplicationContext()).load(user.getUserAvatarURL()).into(userImage);
+                if(!user.getUserAvatarURL().equals("empty")){
+                    Glide.with(getApplicationContext()).load(user.getUserAvatarURL()).into(userImage);
+                }
             }
         }
         @Override
