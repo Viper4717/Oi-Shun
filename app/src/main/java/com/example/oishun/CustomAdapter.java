@@ -53,17 +53,19 @@ public class CustomAdapter extends BaseAdapter {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             //Toast.makeText(context,"dhukse",Toast.LENGTH_LONG);
             convertView = inflater.inflate(R.layout.activity_content_layout, parent, false);
-            ImageView coverPhotoImage = (ImageView) convertView.findViewById(R.id.audio_cover_photo);
-            TextView contentNameText = (TextView) convertView.findViewById(R.id.content_name_text);
-            TextView artistName = convertView.findViewById(R.id.artist_name);
-            TextView durationText = convertView.findViewById(R.id.duration);
-          //  String name = contentNames[position];
-           // coverPhotoImage.setImageResource(coverPhotos[position % 1]);
-            Glide.with(context).load(photos[position]).into(coverPhotoImage);
-            contentNameText.setText(contentNames[position]);
-            artistName.setText(uploaderNames[position]);
-            durationText.setText(durations[position]);
-            //artistName.setOnClickListener(this);
+
+        }
+        ImageView coverPhotoImage = (ImageView) convertView.findViewById(R.id.audio_cover_photo);
+        TextView contentNameText = (TextView) convertView.findViewById(R.id.content_name_text);
+        TextView artistName = convertView.findViewById(R.id.artist_name);
+        TextView durationText = convertView.findViewById(R.id.duration);
+        //  String name = contentNames[position];
+        // coverPhotoImage.setImageResource(coverPhotos[position % 1]);
+        Glide.with(context).load(photos[position]).into(coverPhotoImage);
+        contentNameText.setText(contentNames[position]);
+        artistName.setText(uploaderNames[position]);
+        durationText.setText(durations[position]);
+        //artistName.setOnClickListener(this);
            /* artistName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -72,7 +74,6 @@ public class CustomAdapter extends BaseAdapter {
                     context.startActivity(intent);
                 }
             });*/
-        }
         return convertView;
     }
 
