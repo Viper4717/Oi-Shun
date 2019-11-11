@@ -203,6 +203,7 @@ public class VoiceRecorder extends AppCompatActivity {
             //changing the recordbutton image to record
             recordButton.setBackgroundResource(R.drawable.record_button_image);
             pauseButton.setVisibility(View.GONE);
+            pausedStatus.setVisibility(View.GONE);
             chooseRecButton.setVisibility(View.VISIBLE);
             Toast.makeText(this, "Recording Stopped", Toast.LENGTH_SHORT).show();
 
