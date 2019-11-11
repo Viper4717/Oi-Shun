@@ -14,19 +14,23 @@
         android:roundIcon="@mipmap/oi_shun_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".UploadFromFile"></activity>
         <activity android:name=".UploadRecording" />
         <activity android:name=".Search" />
         <activity android:name=".UserPage" />
         <activity android:name=".SignUpPage" />
-        <activity android:name=".SignInPage"
+        <activity
+            android:name=".SignInPage"
             android:noHistory="true" />
         <activity android:name=".VoiceRecorder" />
         <activity android:name=".MusicPlayer" />
         <activity android:name=".HomePage" />
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

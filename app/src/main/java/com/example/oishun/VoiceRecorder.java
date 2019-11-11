@@ -22,6 +22,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,6 +58,7 @@ public class VoiceRecorder extends AppCompatActivity {
     ImageButton recordButton;
     ImageButton pauseButton;
     ImageButton backButton;
+    Button chooseRecButton;
     Chronometer recordTimer;
     TextView storageRemaining;
     TextView pausedStatus;
@@ -63,6 +66,7 @@ public class VoiceRecorder extends AppCompatActivity {
     boolean recording = true;
     boolean paused = true;
     final int REQUEST_PERMISSION_CODE = 1000;
+    final int RESULT_LOAD_REC = 2;
     String outputDir;
     String oldFileName;
     long intDuration;
@@ -83,6 +87,7 @@ public class VoiceRecorder extends AppCompatActivity {
         pauseButton = (ImageButton) findViewById(R.id.pauseButton);
         backButton = (ImageButton) findViewById(R.id.backButton);
         recordTimer = (Chronometer) findViewById(R.id.recordTimer);
+        chooseRecButton = findViewById(R.id.chooseRecButton);
         storageRemaining = (TextView) findViewById(R.id.storageRemaining);
         pausedStatus = (TextView) findViewById(R.id.pausedStatus);
         oldFileName = null;
@@ -92,6 +97,16 @@ public class VoiceRecorder extends AppCompatActivity {
         if(!file.exists()) file.mkdir();
         double freeBytesExternal = new File(getExternalFilesDir(null).toString()).getFreeSpace();
         storageRemaining.setText(formatSize(freeBytesExternal));
+
+        //ChooseFileButton action
+        chooseRecButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent recIntent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+                recIntent.setType("audio/*");
+                startActivityForResult(recIntent, RESULT_LOAD_REC);
+            }
+        });
 
         //Recordbutton action
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +175,7 @@ public class VoiceRecorder extends AppCompatActivity {
             //Changing the recordbutton image to stop
             recordButton.setBackgroundResource(R.drawable.stop_button_image);
             pauseButton.setVisibility(View.VISIBLE);
+            chooseRecButton.setVisibility(View.GONE);
             Toast.makeText(this, "Recording Started", Toast.LENGTH_SHORT).show();
 
             //preparing the mediaRecorder
@@ -187,6 +203,7 @@ public class VoiceRecorder extends AppCompatActivity {
             //changing the recordbutton image to record
             recordButton.setBackgroundResource(R.drawable.record_button_image);
             pauseButton.setVisibility(View.GONE);
+            chooseRecButton.setVisibility(View.VISIBLE);
             Toast.makeText(this, "Recording Stopped", Toast.LENGTH_SHORT).show();
 
             //stopping the mediaRecorder
@@ -230,6 +247,31 @@ public class VoiceRecorder extends AppCompatActivity {
             //resuming the mediaRecorder
             mediaRecorder.resume();
             startChronometer();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RESULT_LOAD_REC && resultCode == RESULT_OK && data != null){
+            Uri selectedRec = data.getData();
+            String recPath = GetFilePathFromDevice.getPath(this, selectedRec);
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            try {
+                mediaPlayer.setDataSource(this, selectedRec);
+                mediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String recDuration = createTimeLabel(mediaPlayer.getDuration());
+            mediaPlayer.release();
+            //Toast.makeText(this, recDuration, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, recPath, Toast.LENGTH_SHORT).show();
+            Intent recIntent = new Intent(VoiceRecorder.this, UploadFromFile.class);
+            recIntent.putExtra("fileDir", recPath);
+            recIntent.putExtra("recordDuration", recDuration);
+            startActivity(recIntent);
         }
     }
 
