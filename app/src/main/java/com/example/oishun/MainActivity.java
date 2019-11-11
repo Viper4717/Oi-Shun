@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         ref = FirebaseDatabase.getInstance().getReference("user");
 
-        //startActivity(new Intent(getApplicationContext(), SignInPage.class));
-
         //Checking if user is already logged in
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

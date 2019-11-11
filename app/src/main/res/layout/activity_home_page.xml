@@ -99,5 +99,6 @@
         app:itemIconTint="@color/colorAccent"
         app:itemTextColor="@color/colorAccent"
         app:layout_constraintTop_toBottomOf="@+id/linearHead"
+        app:headerLayout="@layout/nav_bar_header"
         app:menu="@menu/navigation_menu"/>
 </androidx.drawerlayout.widget.DrawerLayout>
