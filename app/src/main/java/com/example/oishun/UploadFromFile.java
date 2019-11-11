@@ -35,6 +35,7 @@ public class UploadFromFile extends AppCompatActivity {
     Button upload;
     Button cancel;
     String fileDir;
+    String outputDir;
     String newFileName;
     String oldFileName;
     String recordDuration;
@@ -57,6 +58,9 @@ public class UploadFromFile extends AppCompatActivity {
         Intent intent = getIntent();
         recordDuration = intent.getStringExtra("recordDuration");
         fileDir = intent.getStringExtra("fileDir");
+        outputDir = fileDir.substring(0, fileDir.lastIndexOf("/"));
+        String fileWithExt = fileDir.substring(fileDir.lastIndexOf("/") + 1);
+        oldFileName = fileWithExt.substring(0, fileWithExt.lastIndexOf("."));
 
         //Initialization
         chooseImageButton = findViewById(R.id.chooseImageButton);
@@ -86,9 +90,9 @@ public class UploadFromFile extends AppCompatActivity {
             public void onClick(View v) {
                 newFileName = userInput.getText().toString();
                 if (newFileName != null && newFileName.trim().length() > 0) {
-                    //File newFile = new File(outputDir, newFileName+".mp3");
-                    //File oldFile = new File(outputDir, oldFileName+".mp3");
-                    //oldFile.renameTo(newFile);
+                    File newFile = new File(outputDir, newFileName+".mp3");
+                    File oldFile = new File(outputDir, oldFileName+".mp3");
+                    oldFile.renameTo(newFile);
                     uploadAudio();
                     oldFileName = null;
                 }
@@ -124,7 +128,7 @@ public class UploadFromFile extends AppCompatActivity {
         String coverImagePath = coverImage.getTag().toString();
 
         final StorageReference imageFilePath = storageReference.child("Recording Covers").
-                child(OwnProfileValue.userName).child(newFileName + ".jpg");
+                child(OwnProfileValue.userName).child(newFileName+".jpg");
         final StorageReference filePath = storageReference.child("Recordings").
                 child(OwnProfileValue.userName).child(newFileName+".mp3");
 
@@ -136,7 +140,7 @@ public class UploadFromFile extends AppCompatActivity {
         else{
             imageUri = Uri.fromFile(new File(coverImagePath));
         }
-        final Uri uri = Uri.fromFile(new File(fileDir, newFileName+".mp3")); //TODO
+        final Uri uri = Uri.fromFile(new File(outputDir, newFileName+".mp3"));
 
         imageFilePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
