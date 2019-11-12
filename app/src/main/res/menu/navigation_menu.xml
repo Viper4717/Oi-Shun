@@ -7,6 +7,11 @@
         android:title="Profile"/>
 
     <item
+        android:id="@+id/favorites"
+        android:icon="@drawable/favorite_icon_image"
+        android:title="Favorites"/>
+
+    <item
         android:id="@+id/signOut"
         android:icon="@drawable/logout_icon_image"
         android:title="Sign Out"/>
