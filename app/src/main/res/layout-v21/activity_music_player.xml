@@ -64,13 +64,13 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
-        android:id="@+id/volumeButton"
+        android:id="@+id/favoriteButton"
         android:layout_width="96dp"
         android:layout_height="100dp"
         android:layout_marginEnd="16dp"
         android:background="?android:selectableItemBackground"
         android:contentDescription="@string/volume"
-        android:src="@drawable/sound2"
+        android:src="@drawable/favorite_button_empty"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -102,7 +102,6 @@
         android:thumbTint="@color/oiShunYellow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playButton"
         app:layout_constraintVertical_bias="0.0" />
@@ -130,7 +129,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/volumeButton"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteButton"
         app:layout_constraintVertical_bias="0.16000003"
         tools:ignore="RelativeOverlap" />
 
@@ -141,7 +140,7 @@
         android:layout_marginTop="15dp"
         android:text="Recording Name"
         android:textColor="@color/colorAccent"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekBar" />
@@ -154,6 +153,7 @@
         android:fontFamily="@font/archivo_regular"
         android:text="User Name"
         android:textColor="@color/colorAccent"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recordNameText" />

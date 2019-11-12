@@ -22,8 +22,6 @@ public class Recording {
         this.recordingDuration = recordingDuration;
     }
 
-
-
     public String getRecordingName() {
         return recordingName;
     }
@@ -55,6 +53,5 @@ public class Recording {
     public void setRecordingImageURL(String recordingImageURL) {
         this.recordingImageURL = recordingImageURL;
     }
-
 
 }
