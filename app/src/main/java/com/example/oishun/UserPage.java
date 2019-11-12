@@ -133,6 +133,7 @@ public class UserPage extends AppCompatActivity {
                 intent.putExtra("recordingName",rec.getRecordingName());
                 intent.putExtra("recordingUploader",rec.getRecordingUploader());
                 intent.putExtra("recordingImageURL",rec.getRecordingImageURL());
+                intent.putExtra("recordingDuration",rec.getRecordingDuration());
                 //intent.putExtra("recordingDuration",rec.getRecordingDuration());
                 startActivity(intent);
             }

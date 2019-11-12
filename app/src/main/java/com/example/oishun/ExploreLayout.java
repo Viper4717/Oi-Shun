@@ -82,6 +82,7 @@ public class ExploreLayout extends Fragment {
                 intent.putExtra("recordingName", rec.getRecordingName());
                 intent.putExtra("recordingImageURL",rec.getRecordingImageURL());
                 intent.putExtra("recordingUploader", rec.getRecordingUploader());
+                intent.putExtra("recordingDuration",rec.getRecordingDuration());
                 //intent.putExtra("recordingDuration",rec.getRecordingDuration());
                 startActivity(intent);
             }

@@ -158,6 +158,7 @@ public class SubscriptionLayout extends Fragment  {
                 intent.putExtra("recordingName",rec.getRecordingName());
                 intent.putExtra("recordingUploader",rec.getRecordingUploader());
                 intent.putExtra("recordingImageURL",rec.getRecordingImageURL());
+                intent.putExtra("recordingDuration",rec.getRecordingDuration());
                 startActivity(intent);
             }
         });

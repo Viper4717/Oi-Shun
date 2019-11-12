@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +29,12 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -39,11 +46,12 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
     ImageButton playButton;
     ImageButton backButton;
     ImageButton rewindButton;
-    ImageButton volumeButton;
+    //ImageButton volumeButton;
+    ImageButton favoriteButton;
     SeekBar seekBar;
     TextView elapsedTimeLabel;
     TextView remainingTimeLabel;
-    MediaPlayer mp;
+    static MediaPlayer mp;
     String playingURL;
     String imageURL;
     String recordingName;
@@ -52,6 +60,10 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
     TextView userNameText;
     AudioManager audioManager;
     ImageView recordingImage;
+    DatabaseReference databaseReference;
+    String recordingDuration;
+    boolean favoriteFlag;
+    String recordingKey;
 
     int totalTime;
     final int REQUEST_PERMISSION_CODE = 1000;
@@ -67,14 +79,16 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
         recordingName = intent.getStringExtra("recordingName");
         userName = intent.getStringExtra("recordingUploader");
         imageURL = intent.getStringExtra("recordingImageURL");
+        recordingDuration = intent.getStringExtra("recordingDuration");
 
         if(!checkPermissionFromDevice())
             requestPermissionFromDevice();
 
         playButton = (ImageButton)findViewById(R.id.playButton);
         backButton = (ImageButton)findViewById(R.id.backButton);
-        volumeButton = (ImageButton)findViewById(R.id.volumeButton);
+        //volumeButton = (ImageButton)findViewById(R.id.volumeButton);
         rewindButton = (ImageButton)findViewById(R.id.rewindButton);
+        favoriteButton = (ImageButton) findViewById(R.id.favoriteButton);
         elapsedTimeLabel = (TextView) findViewById(R.id.elapsedTimeLabel);
         remainingTimeLabel = (TextView) findViewById(R.id.remainingTimeLabel);
         recordNameText = (TextView) findViewById(R.id.recordNameText);
@@ -83,8 +97,12 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
         recordNameText.setText(recordingName);
         userNameText.setText(userName);
         recordingImage = (ImageView) findViewById(R.id.imageView);
+        databaseReference = FirebaseDatabase.getInstance().getReference("favorites").child(OwnProfileValue.userName);
         Glide.with(getApplicationContext()).load(imageURL).into(recordingImage);
 
+
+        Query query = databaseReference.orderByChild("recordingURL").equalTo(playingURL);
+        query.addValueEventListener(favoriteListener);
 
         // Media Player
         //mp = MediaPlayer.create(this,R.raw.music);
@@ -104,6 +122,7 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
             @Override
             public void onClick(View view) {
                 mp.stop();
+                mp.reset();
                 //mp.release();
                 finish();
             }
@@ -120,6 +139,27 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
             }
         });
 
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!favoriteFlag) {
+                    Recording recording = new Recording();
+                    recording.setRecordingName(recordingName);
+                    recording.setRecordingUploader(userName);
+                    recording.setRecordingDuration(recordingDuration);
+                    recording.setRecordingImageURL(imageURL);
+                    recording.setRecordingURL(playingURL);
+                    //recording.setFavorite(true);
+                    String uploadID = databaseReference.push().getKey();
+                    databaseReference.child(uploadID).setValue(recording);
+                    favoriteButton.setImageResource(R.drawable.favorite_button);
+                }
+                else{
+                    databaseReference.child(recordingKey).removeValue();
+                    favoriteButton.setImageResource(R.drawable.favorite_button_empty);
+                }
+            }
+        });
 
         //Toast.makeText(this, Strin-g.valueOf(totalTime), Toast.LENGTH_SHORT).show();
         playButton.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +192,7 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
             mp.stop();
+            mp.reset();
             //mp.release();
             finish();
             return true;
@@ -250,12 +291,12 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
         });
 
         //volume button
-        volumeButton.setOnClickListener(new View.OnClickListener() {
+        /*volumeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
             }
-        });
+        });*/
 
         new Thread(new Runnable() {
             @Override
@@ -271,6 +312,29 @@ public class MusicPlayer extends AppCompatActivity implements MediaPlayer.OnPrep
             }
         }).start();
     }
+
+    ValueEventListener favoriteListener  = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if (dataSnapshot.exists()){
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    recordingKey = ds.getKey();
+                }
+                favoriteFlag = true;
+                //Toast.makeText(MusicPlayer.this, recordingKey, Toast.LENGTH_SHORT).show();
+                favoriteButton.setImageResource(R.drawable.favorite_button);
+            }
+            else{
+                favoriteFlag = false;
+                favoriteButton.setImageResource(R.drawable.favorite_button_empty);
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private Handler handler = new Handler() {
         @Override
