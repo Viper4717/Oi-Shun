@@ -4,6 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".Favorites">
+
+    <TextView
+        android:id="@+id/favoriteText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:fontFamily="@font/archivo_regular"
+        android:paddingStart="20dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="3dp"
+        android:text="Favorites"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userImage" />
+
+    <ListView
+        android:id="@+id/favourite_contents"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:dividerHeight="2dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
