@@ -61,7 +61,6 @@ public class SignUpPage extends AppCompatActivity {
     int RESULT_LOAD_IMAGE;
     ProgressDialog progressDialog;
     final int REQUEST_PERMISSION_CODE = 1000;
-    Boolean uniqueUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +87,6 @@ public class SignUpPage extends AppCompatActivity {
         avatarChooseButton = findViewById(R.id.avatarChoosebutton);
         progressDialog = new ProgressDialog(this);
         RESULT_LOAD_IMAGE = 1;
-        uniqueUsername = false;
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,14 +128,10 @@ public class SignUpPage extends AppCompatActivity {
     }
 
     public void register(){
-        String name = username.getText().toString().trim();
+        final String name = username.getText().toString().trim();
         final String pass = password.getText().toString().trim();
         final String email = userEmail.getText().toString().trim();
-        String confirmPass = retypePassword.getText().toString().trim();
-
-        if(!name.isEmpty()){
-            ref.child(name).addListenerForSingleValueEvent(userNameListener);
-        }
+        final String confirmPass = retypePassword.getText().toString().trim();
 
         if(email.isEmpty()){
             userEmail.setError("Please enter an e-mail");
@@ -160,76 +154,85 @@ public class SignUpPage extends AppCompatActivity {
             retypePassword.requestFocus();
         }
         else if(pass.equals(confirmPass)) {
-            if(uniqueUsername){
-                user = new User();
-                user.setName(name);
-                user.setEmail(email);
-                user.setUserAvatarURL("empty");
+            ref.child(name).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        username.setError("Username already in use");
+                        username.requestFocus();
+                    }
+                    else{
+                        user = new User();
+                        user.setName(name);
+                        user.setEmail(email);
+                        user.setUserAvatarURL("empty");
 
-                String avatarPath = userAvatar.getTag().toString();
+                        String avatarPath = userAvatar.getTag().toString();
 
-                if(!avatarPath.equals("empty")) {
-                    progressDialog.setMessage("Registering...");
-                    progressDialog.show();
+                        if(!avatarPath.equals("empty")) {
+                            progressDialog.setMessage("Registering...");
+                            progressDialog.show();
 
-                    final StorageReference filePath = storageReference.child("User Avatars").child(user.getName())
-                            .child(user.getName() + ".jpg");
+                            final StorageReference filePath = storageReference.child("User Avatars").child(user.getName())
+                                    .child(user.getName() + ".jpg");
 
-                    Uri uri = Uri.fromFile(new File(avatarPath));
+                            Uri uri = Uri.fromFile(new File(avatarPath));
 
-                    filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onSuccess(Uri uri) {
-                                    String downloadURL = uri.toString();
-                                    user.setUserAvatarURL(downloadURL);
-                                    firebaseAuth.createUserWithEmailAndPassword(email, pass)
-                                            .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                                                @Override
-                                                public void onSuccess(AuthResult authResult) {
-                                                    ref.child(user.getName()).setValue(user);
-                                                    progressDialog.dismiss();
-                                                    Toast.makeText(SignUpPage.this, "Registered Successfully!"
-                                                            , Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            String downloadURL = uri.toString();
+                                            user.setUserAvatarURL(downloadURL);
+                                            firebaseAuth.createUserWithEmailAndPassword(email, pass)
+                                                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                                        @Override
+                                                        public void onSuccess(AuthResult authResult) {
+                                                            ref.child(user.getName()).setValue(user);
+                                                            progressDialog.dismiss();
+                                                            Toast.makeText(SignUpPage.this, "Registered Successfully!"
+                                                                    , Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }
+                                    });
                                 }
                             });
-                        }
-                    });
 
-                    filePath.putFile(uri).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(SignUpPage.this, "Unsuccessful! Check connection and try again"
-                                    , Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-                else{
-                    progressDialog.setMessage("Registering...");
-                    progressDialog.show();
-                    firebaseAuth.createUserWithEmailAndPassword(email, pass)
-                            .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            filePath.putFile(uri).addOnFailureListener(new OnFailureListener() {
                                 @Override
-                                public void onSuccess(AuthResult authResult) {
-                                    ref.child(user.getName()).setValue(user);
+                                public void onFailure(@NonNull Exception e) {
                                     progressDialog.dismiss();
-                                    Toast.makeText(SignUpPage.this, "Registered Successfully!"
+                                    Toast.makeText(SignUpPage.this, "Unsuccessful! Check connection and try again"
                                             , Toast.LENGTH_SHORT).show();
                                 }
                             });
+                        }
+                        else{
+                            progressDialog.setMessage("Registering...");
+                            progressDialog.show();
+                            firebaseAuth.createUserWithEmailAndPassword(email, pass)
+                                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                        @Override
+                                        public void onSuccess(AuthResult authResult) {
+                                            ref.child(user.getName()).setValue(user);
+                                            progressDialog.dismiss();
+                                            Toast.makeText(SignUpPage.this, "Registered Successfully!"
+                                                    , Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    }
                 }
-            }
-            else{
-                username.setError("Username already in use");
-                username.requestFocus();
-            }
-        }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
         else{
             retypePassword.setError("Passwords don't match");
             retypePassword.requestFocus();
@@ -246,20 +249,4 @@ public class SignUpPage extends AppCompatActivity {
             userAvatar.setTag(imagePath);
         }
     }
-
-    ValueEventListener userNameListener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            if (dataSnapshot.exists()) {
-                uniqueUsername = false;
-            }
-            else{
-                uniqueUsername = true;
-            }
-        }
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    };
 }

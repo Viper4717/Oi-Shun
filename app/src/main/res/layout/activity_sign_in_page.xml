@@ -29,6 +29,7 @@
         android:cursorVisible="true"
         android:textCursorDrawable="@null"
         android:hint="username"
+        android:inputType="textPersonName"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
