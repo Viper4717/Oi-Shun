@@ -127,7 +127,7 @@ public class UserPage extends AppCompatActivity {
         personalContentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Recording rec = personalRecordings.get(position);
+                Recording rec = personalRecordings.get(personalRecordings.size() - 1 - position);
                 Intent intent = new Intent(UserPage.this,MusicPlayer.class);
                 intent.putExtra("recordingURL", rec.getRecordingURL());
                 intent.putExtra("recordingName",rec.getRecordingName());

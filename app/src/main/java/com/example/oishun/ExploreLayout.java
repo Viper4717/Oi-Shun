@@ -76,7 +76,7 @@ public class ExploreLayout extends Fragment {
         subscribedContentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Recording rec = contents.get(position);
+                Recording rec = contents.get(contents.size() - 1 - position);
                 Intent intent = new Intent(context, MusicPlayer.class);
                 intent.putExtra("recordingURL", rec.getRecordingURL());
                 intent.putExtra("recordingName", rec.getRecordingName());
