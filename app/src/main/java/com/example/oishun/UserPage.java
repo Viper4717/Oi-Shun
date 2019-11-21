@@ -154,7 +154,7 @@ public class UserPage extends AppCompatActivity {
                 String[] names = new String[personalRecordings.size()];
 
                 for (int i = 0; i < names.length; i++) {
-                    names[i] = personalRecordings.get(i).getRecordingName();
+                    names[names.length-1-i] = personalRecordings.get(i).getRecordingName();
                 }
 
               /*  String[] uploaders = new String[personalRecordings.size()];
@@ -166,13 +166,13 @@ public class UserPage extends AppCompatActivity {
                 String[] durations = new String[personalRecordings.size()];
 
                 for(int i = 0 ; i < names.length ; i++){
-                    durations[i] = personalRecordings.get(i).getRecordingDuration();
+                    durations[names.length-1-i] = personalRecordings.get(i).getRecordingDuration();
                 }
 
                 String[] coverPhotos = new String[personalRecordings.size()];
 
                 for(int i = 0 ; i < names.length ; i++){
-                    coverPhotos[i] = personalRecordings.get(i).getRecordingImageURL();
+                    coverPhotos[names.length-1-i] = personalRecordings.get(i).getRecordingImageURL();
                 }
 
                 UserAdapter userAdapter = new UserAdapter(UserPage.this, names, coverPhotos,myName,durations);

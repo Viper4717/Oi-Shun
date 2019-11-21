@@ -108,10 +108,10 @@ public class SubscriptionLayout extends Fragment  {
                         String[] durations = new String[contents.size()];
 
                         for(int i = 0 ; i < names.length ; i++){
-                            names[i] = contents.get(i).getRecordingName();
-                            uploaders[i] = contents.get(i).getRecordingUploader();
-                            durations[i] = contents.get(i).getRecordingDuration();
-                            coverPhotos[i] = contents.get(i).getRecordingImageURL();
+                            names[names.length-1-i] = contents.get(i).getRecordingName();
+                            uploaders[names.length-1-i] = contents.get(i).getRecordingUploader();
+                            durations[names.length-1-i] = contents.get(i).getRecordingDuration();
+                            coverPhotos[names.length-1-i] = contents.get(i).getRecordingImageURL();
                         }
 
 
